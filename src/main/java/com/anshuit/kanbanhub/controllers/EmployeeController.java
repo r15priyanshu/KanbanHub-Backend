@@ -1,5 +1,6 @@
 package com.anshuit.kanbanhub.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.anshuit.kanbanhub.constants.GlobalConstants;
+import com.anshuit.kanbanhub.dtos.ApiResponseDto;
 import com.anshuit.kanbanhub.dtos.EmployeeDto;
 import com.anshuit.kanbanhub.entities.Employee;
 import com.anshuit.kanbanhub.services.impls.DataTransferService;
 import com.anshuit.kanbanhub.services.impls.EmployeeServiceImpl;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/employee")
@@ -51,15 +58,28 @@ public class EmployeeController {
 		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
 		return new ResponseEntity<>(employeeDto, HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/{employeeId}")
-	public ResponseEntity<EmployeeDto> updateEmployeeById(@RequestBody EmployeeDto employeeDto,@PathVariable("employeeId") int employeeId) {
+	public ResponseEntity<EmployeeDto> updateEmployeeById(@RequestBody EmployeeDto employeeDto,
+			@PathVariable("employeeId") int employeeId) {
 		Employee updatedEmployee = employeeService
-				.updateEmployeeById(dataTransferService.mapEmployeeDtoToEmployee(employeeDto),employeeId);
+				.updateEmployeeById(dataTransferService.mapEmployeeDtoToEmployee(employeeDto), employeeId);
 		EmployeeDto updatedEmployeeDto = dataTransferService.mapEmployeeToEmployeeDto(updatedEmployee);
 		return new ResponseEntity<>(updatedEmployeeDto, HttpStatus.OK);
 	}
 
+	@PostMapping("/updateProfilePicture/{employeeId}")
+	public ResponseEntity<ApiResponseDto> updateProfilePictureByEmployeeId(@RequestParam("image") MultipartFile image,
+			@PathVariable("employeeId") Integer employeeId, HttpServletRequest request) {
+
+		employeeService.updateProfilePictureByEmployeeId(image, employeeId);
+		ApiResponseDto apiResponseDto = ApiResponseDto.builder()
+				.message(GlobalConstants.PROFILE_PICTURE_SUCCESSFULLY_UPDATED).timestamp(LocalDateTime.now())
+				.status(HttpStatus.CREATED).statusCode(HttpStatus.CREATED.value()).path(request.getRequestURI())
+				.build();
+		return new ResponseEntity<ApiResponseDto>(apiResponseDto, HttpStatus.CREATED);
+	}
+	
 	@DeleteMapping("/{employeeId}")
 	public ResponseEntity<EmployeeDto> deleteEmployeeById(@PathVariable("employeeId") int employeeId) {
 		Employee employee = employeeService.deleteEmployeeById(employeeId);

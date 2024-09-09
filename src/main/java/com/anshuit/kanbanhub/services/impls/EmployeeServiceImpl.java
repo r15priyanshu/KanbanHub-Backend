@@ -2,11 +2,13 @@ package com.anshuit.kanbanhub.services.impls;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.anshuit.kanbanhub.constants.GlobalConstants;
 import com.anshuit.kanbanhub.entities.Employee;
@@ -14,6 +16,7 @@ import com.anshuit.kanbanhub.entities.Role;
 import com.anshuit.kanbanhub.exceptions.CustomException;
 import com.anshuit.kanbanhub.repositories.EmployeeRepository;
 import com.anshuit.kanbanhub.repositories.RoleRepository;
+import com.anshuit.kanbanhub.utils.CustomUtil;
 
 @Service
 public class EmployeeServiceImpl {
@@ -26,6 +29,9 @@ public class EmployeeServiceImpl {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private CustomUtil customUtil;
 
 	public Employee createEmployee(Employee employee) {
 		// First check if employee is not already registered.
@@ -79,6 +85,37 @@ public class EmployeeServiceImpl {
 		foundEmployee.getAddress().setState(employee.getAddress().getState());
 
 		return employeeRepository.save(foundEmployee);
+	}
+
+	public Employee updateProfilePictureByEmployeeId(MultipartFile file, Integer employeeId) {
+		Employee employee = employeeRepository.findById(employeeId)
+				.orElseThrow(() -> new CustomException(GlobalConstants.EMPLOYEE_NOT_FOUND_WITH_ID + employeeId,
+						HttpStatus.NOT_FOUND));
+
+		String filename = file.getOriginalFilename();
+		if (file != null && customUtil.isImageHavingValidExtension(filename)) {
+			try {
+				byte[] imageData = file.getBytes();
+				String profilePicName = UUID.randomUUID().toString().concat(customUtil.getFileExtension(filename));
+				employee.setProfilePicData(imageData);
+				employee.setProfilePic(profilePicName);
+			} catch (Exception e) {
+				throw new CustomException(GlobalConstants.ERROR_IN_UPDATING_PROFILE_PICTURE,
+						HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} else {
+			throw new CustomException(GlobalConstants.NOT_AN_ALLOWED_IMAGE_EXTENSION, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return employeeRepository.save(employee);
+	}
+
+	public byte[] getEmployeeProfilePicData(int employeeId) {
+		Employee employee = this.getEmployeeById(employeeId);
+		if (employee == null || employee.getProfilePicData() == null) {
+			throw new CustomException(GlobalConstants.PROFILE_PICTURE_NOT_PRESENT, HttpStatus.NOT_FOUND);
+		}
+
+		return employee.getProfilePicData();
 	}
 
 	public Employee deleteEmployeeById(int employeeId) {

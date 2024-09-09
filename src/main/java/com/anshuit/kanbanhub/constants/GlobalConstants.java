@@ -21,7 +21,7 @@ public class GlobalConstants {
 	public static final String TASK_STATUS_IN_PROGRESS = "IN-PROGRESS";
 	public static final String TASK_STATUS_COMPLETED = "COMPLETED";
 	public static final long DEFAULT_TASK_DUE_DAYS_COUNT_MILLISECONDS = 3 * 24 * 60 * 60 * 1000;
-	
+
 	public static final String JWT_DEFAULT_SECRET = "MY-CUSTOM-SECRET";
 	public static final String JWT_TOKEN_RESPONSE_HEADER_KEY = "Jwt-Token";
 	public static final long JWT_TOKEN_VALIDITY_IN_MILLISECONDS = 8 * 60 * 60 * 1000; // HR,MIN,SEC,MILLI
@@ -35,10 +35,18 @@ public class GlobalConstants {
 	public static final String EMPLOYEE_NOT_FOUND_WITH_EMAIL = "Employee not found with id : ";
 	public static final String EMPLOYEE_ALREADY_EXIST_WITH_EMAIL = "Employee already exist with email : ";
 	public static final String EMPLOYEE_ALREADY_ALLOCATED_TO_PROJECT = "Employee already added in this project with email : ";
+	public static final String PROFILE_PICTURE_SUCCESSFULLY_UPDATED= "Profile Picture Successfully Updated !!";
+	public static final String PROFILE_PICTURE_NOT_PRESENT= "Profile Picture Not Present !!";
+	public static final String ERROR_IN_UPDATING_PROFILE_PICTURE = "Error In Uploading Profile Picture !!";
+	public static final String NOT_AN_ALLOWED_IMAGE_EXTENSION = "Not An Allowed Image Extension !!";
+
 	public static final String PROJECT_NOT_FOUND_WITH_ID = "Project not found with id : ";
 	public static final String TASK_NOT_FOUND_WITH_ID = "Task not found with id : ";
 
 	public static final String LOGIN_URL = "/auth/login";
 	public static final String REGISTER_URL = "/auth/register";
-
+	
+	public static final String EXTENSION_JPG = ".jpg";
+	public static final String EXTENSION_JPEG = ".jpeg";
+	public static final String EXTENSION_PNG = ".png";
 }
