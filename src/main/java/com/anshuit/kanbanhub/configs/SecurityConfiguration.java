@@ -34,7 +34,7 @@ public class SecurityConfiguration {
 	}
 
 	@Bean
-	public AuthenticationManager getAuthenticationManager(AuthenticationConfiguration configuration) throws Exception {
+	AuthenticationManager getAuthenticationManager(AuthenticationConfiguration configuration) throws Exception {
 		AuthenticationManager authenticationManager = configuration.getAuthenticationManager();
 		return authenticationManager;
 	}
@@ -43,6 +43,7 @@ public class SecurityConfiguration {
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((requests) -> requests
 				.requestMatchers("/error", GlobalConstants.LOGIN_URL, GlobalConstants.REGISTER_URL).permitAll()
+				.requestMatchers("/images/**").permitAll()
 				.anyRequest().authenticated());
 		http.exceptionHandling(ehc -> ehc.authenticationEntryPoint(new BasicAuthenticationEntryPoint()));
 		http.addFilterBefore(jwtTokenValidatorFilter, UsernamePasswordAuthenticationFilter.class);
