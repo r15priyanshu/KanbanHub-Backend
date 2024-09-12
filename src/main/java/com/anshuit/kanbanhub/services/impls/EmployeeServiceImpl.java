@@ -104,8 +104,18 @@ public class EmployeeServiceImpl {
 						HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		} else {
-			throw new CustomException(GlobalConstants.NOT_AN_ALLOWED_IMAGE_EXTENSION, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new CustomException(GlobalConstants.NOT_AN_ALLOWED_IMAGE_EXTENSION, HttpStatus.BAD_REQUEST);
 		}
+		return employeeRepository.save(employee);
+	}
+	
+	public Employee removeProfilePictureByEmployeeId(Integer employeeId) {
+		Employee employee = employeeRepository.findById(employeeId)
+				.orElseThrow(() -> new CustomException(GlobalConstants.EMPLOYEE_NOT_FOUND_WITH_ID + employeeId,
+						HttpStatus.NOT_FOUND));
+
+		employee.setProfilePic(GlobalConstants.DEFAULT_PROFILE_PIC_NAME);
+		employee.setProfilePicData(null);
 		return employeeRepository.save(employee);
 	}
 

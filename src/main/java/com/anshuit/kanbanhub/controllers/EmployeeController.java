@@ -2,6 +2,7 @@ package com.anshuit.kanbanhub.controllers;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,14 +73,27 @@ public class EmployeeController {
 	public ResponseEntity<ApiResponseDto> updateProfilePictureByEmployeeId(@RequestParam("image") MultipartFile image,
 			@PathVariable("employeeId") Integer employeeId, HttpServletRequest request) {
 
-		employeeService.updateProfilePictureByEmployeeId(image, employeeId);
+		Employee employee = employeeService.updateProfilePictureByEmployeeId(image, employeeId);
+		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
 		ApiResponseDto apiResponseDto = ApiResponseDto.builder()
 				.message(GlobalConstants.PROFILE_PICTURE_SUCCESSFULLY_UPDATED).timestamp(LocalDateTime.now())
 				.status(HttpStatus.CREATED).statusCode(HttpStatus.CREATED.value()).path(request.getRequestURI())
-				.build();
+				.data(Map.of(GlobalConstants.KEY_EMPLOYEE_LCASE, employeeDto)).build();
 		return new ResponseEntity<ApiResponseDto>(apiResponseDto, HttpStatus.CREATED);
 	}
-	
+
+	@PutMapping("/removeProfilePicture/{employeeId}")
+	public ResponseEntity<ApiResponseDto> removeProfilePictureByEmployeeId(
+			@PathVariable("employeeId") Integer employeeId, HttpServletRequest request) {
+		Employee employee = employeeService.removeProfilePictureByEmployeeId(employeeId);
+		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
+		ApiResponseDto apiResponseDto = ApiResponseDto.builder()
+				.message(GlobalConstants.PROFILE_PICTURE_SUCCESSFULLY_REMOVED).timestamp(LocalDateTime.now())
+				.status(HttpStatus.OK).statusCode(HttpStatus.OK.value()).path(request.getRequestURI())
+				.data(Map.of(GlobalConstants.KEY_EMPLOYEE_LCASE, employeeDto)).build();
+		return new ResponseEntity<ApiResponseDto>(apiResponseDto, HttpStatus.OK);
+	}
+
 	@DeleteMapping("/{employeeId}")
 	public ResponseEntity<EmployeeDto> deleteEmployeeById(@PathVariable("employeeId") int employeeId) {
 		Employee employee = employeeService.deleteEmployeeById(employeeId);

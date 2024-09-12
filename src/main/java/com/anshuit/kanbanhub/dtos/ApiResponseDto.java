@@ -1,6 +1,7 @@
 package com.anshuit.kanbanhub.dtos;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 
@@ -17,5 +18,5 @@ public class ApiResponseDto {
 	private String message;
 	private HttpStatus status;
 	private String path;
-	
+	private Map<Object, Object> data;
 }

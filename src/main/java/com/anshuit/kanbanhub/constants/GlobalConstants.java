@@ -36,6 +36,7 @@ public class GlobalConstants {
 	public static final String EMPLOYEE_ALREADY_EXIST_WITH_EMAIL = "Employee already exist with email : ";
 	public static final String EMPLOYEE_ALREADY_ALLOCATED_TO_PROJECT = "Employee already added in this project with email : ";
 	public static final String PROFILE_PICTURE_SUCCESSFULLY_UPDATED= "Profile Picture Successfully Updated !!";
+	public static final String PROFILE_PICTURE_SUCCESSFULLY_REMOVED= "Profile Picture Successfully Removed !!";
 	public static final String PROFILE_PICTURE_NOT_PRESENT= "Profile Picture Not Present !!";
 	public static final String ERROR_IN_UPDATING_PROFILE_PICTURE = "Error In Uploading Profile Picture !!";
 	public static final String NOT_AN_ALLOWED_IMAGE_EXTENSION = "Not An Allowed Image Extension !!";
@@ -49,4 +50,7 @@ public class GlobalConstants {
 	public static final String EXTENSION_JPG = ".jpg";
 	public static final String EXTENSION_JPEG = ".jpeg";
 	public static final String EXTENSION_PNG = ".png";
+	
+	//KEY USED FOR MAPS or DBS
+	public static final String KEY_EMPLOYEE_LCASE = "employee";
 }
