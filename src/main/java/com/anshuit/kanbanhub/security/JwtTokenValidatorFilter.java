@@ -46,11 +46,11 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 				log.info("Extracting Username From Token...");
 				email = jwtUtil.extractUsername(encodedTokenWithoutBearer);
 			} catch (SignatureException e) {
-				log.info("JWT Signature Does Not Match Locally Computed signature !! Token Might Have Been Tampered !!");
+				log.info(GlobalConstants.JWT_SIGNATURE_EXCEPTION_MESSAGE);
 			} catch (MalformedJwtException e) {
-				log.info("Token Malformed !! Token Might Have Been Tampered !!");
-			}catch (ExpiredJwtException e) {
-				log.info("Token Already Expired !!");
+				log.info(GlobalConstants.JWT_MALFORMED_EXCEPTION_MESSAGE);
+			} catch (ExpiredJwtException e) {
+				log.info(GlobalConstants.JWT_EXPIRED_EXCEPTION_MESSAGE);
 			}
 
 			if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -64,16 +64,14 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 				}
 			}
 		} else {
-			log.info(
-					"Authorization Header is either empty or Does not starts With Bearer !! Invoking Next Filter in the Chain !!");
+			log.info("Authorization Header is either empty or Does not starts With Bearer !! Invoking Next Filter in the Chain !!");
 		}
-
 		// Should Always Execute
 		filterChain.doFilter(request, response);
 	}
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-		return request.getServletPath().equals(GlobalConstants.LOGIN_URL);
+		return GlobalConstants.EXCLUDED_PATHS_FOR_JWT_TOKEN_VALIDATOR_FILTER_SET.contains(request.getServletPath());
 	}
 }

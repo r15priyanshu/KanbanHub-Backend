@@ -44,14 +44,13 @@ public class MyJwtUtil {
 		return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
 	}
 
-	private Boolean isTokenExpired(String token) {
+	public Boolean isTokenExpired(String token) {
 		return extractExpiration(token).before(new Date());
 	}
 
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("role", userDetails.getAuthorities().stream().map(authority -> authority.getAuthority())
-				.collect(Collectors.joining(",")));
+		claims.put("role", userDetails.getAuthorities().stream().map(authority -> authority.getAuthority()).collect(Collectors.joining(",")));
 		return createToken(claims, userDetails.getUsername());
 	}
 

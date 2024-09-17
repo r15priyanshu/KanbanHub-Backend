@@ -42,7 +42,7 @@ public class SecurityConfiguration {
 	@Bean
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/error", GlobalConstants.LOGIN_URL, GlobalConstants.REGISTER_URL).permitAll()
+				.requestMatchers("/error", GlobalConstants.LOGIN_URL, GlobalConstants.REGISTER_URL,GlobalConstants.CHECK_TOKEN_VALIDITY_URL).permitAll()
 				.requestMatchers("/images/**").permitAll()
 				.anyRequest().authenticated());
 		http.exceptionHandling(ehc -> ehc.authenticationEntryPoint(new BasicAuthenticationEntryPoint()));

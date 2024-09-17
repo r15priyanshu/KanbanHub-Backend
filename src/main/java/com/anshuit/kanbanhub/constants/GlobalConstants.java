@@ -1,6 +1,7 @@
 package com.anshuit.kanbanhub.constants;
 
 import java.util.List;
+import java.util.Set;
 
 public class GlobalConstants {
 	private GlobalConstants() {
@@ -24,7 +25,10 @@ public class GlobalConstants {
 
 	public static final String JWT_DEFAULT_SECRET = "MY-CUSTOM-SECRET";
 	public static final String JWT_TOKEN_RESPONSE_HEADER_KEY = "Jwt-Token";
-	public static final long JWT_TOKEN_VALIDITY_IN_MILLISECONDS = 8 * 60 * 60 * 1000; // HR,MIN,SEC,MILLI
+	public static final long JWT_TOKEN_VALIDITY_IN_MILLISECONDS = 3 * 60 * 60 * 1000; // HR,MIN,SEC,MILLI
+	public static final String JWT_SIGNATURE_EXCEPTION_MESSAGE = "JWT Signature Does Not Match Locally Computed signature !! Token Might Have Been Tampered !!";
+	public static final String JWT_MALFORMED_EXCEPTION_MESSAGE = "Token Malformed !! Token Might Have Been Tampered !!";
+	public static final String JWT_EXPIRED_EXCEPTION_MESSAGE = "Token Already Expired !!";
 
 	public static final List<String> ALLOWED_ORIGINS_LIST = List.of(DEFAULT_FRONTEND_ORIGIN_URL);
 	public static final List<String> ALLOWED_HEADERS_LIST = List.of("*");
@@ -46,6 +50,7 @@ public class GlobalConstants {
 
 	public static final String LOGIN_URL = "/auth/login";
 	public static final String REGISTER_URL = "/auth/register";
+	public static final String CHECK_TOKEN_VALIDITY_URL = "/auth/validateToken";
 	
 	public static final String EXTENSION_JPG = ".jpg";
 	public static final String EXTENSION_JPEG = ".jpeg";
@@ -53,4 +58,11 @@ public class GlobalConstants {
 	
 	//KEY USED FOR MAPS or DBS
 	public static final String KEY_EMPLOYEE_LCASE = "employee";
+	
+	//SET OF URLS FOR WHICH TOKEN VALIDATOR FILTER SHOULD NOT RUN
+	public static final Set<String> EXCLUDED_PATHS_FOR_JWT_TOKEN_VALIDATOR_FILTER_SET = Set.of(
+	        GlobalConstants.LOGIN_URL,
+	        GlobalConstants.REGISTER_URL,
+	        GlobalConstants.CHECK_TOKEN_VALIDITY_URL
+	);
 }
