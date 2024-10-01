@@ -18,20 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.anshuit.kanbanhub.constants.GlobalConstants;
 import com.anshuit.kanbanhub.dtos.EmployeeDto;
 import com.anshuit.kanbanhub.dtos.LoginRequestDto;
-import com.anshuit.kanbanhub.dtos.TokenDto;
 import com.anshuit.kanbanhub.entities.Employee;
 import com.anshuit.kanbanhub.exceptions.CustomException;
 import com.anshuit.kanbanhub.security.MyJwtUtil;
 import com.anshuit.kanbanhub.services.impls.DataTransferService;
 import com.anshuit.kanbanhub.services.impls.EmployeeServiceImpl;
+import com.anshuit.kanbanhub.services.impls.RefreshTokenServiceImpl;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 public class AuthenticationController {
 
@@ -43,6 +38,9 @@ public class AuthenticationController {
 
 	@Autowired
 	private EmployeeServiceImpl employeeService;
+
+	@Autowired
+	private RefreshTokenServiceImpl refreshTokenService;
 
 	@Autowired
 	private DataTransferService dataTransferService;
@@ -76,6 +74,8 @@ public class AuthenticationController {
 
 		// Setting The Token In Response Header
 		response.setHeader(GlobalConstants.JWT_TOKEN_RESPONSE_HEADER_KEY, token);
+		response.setHeader(GlobalConstants.JWT_REFRESH_TOKEN_RESPONSE_HEADER_KEY,
+				refreshTokenService.createRefreshToken(employee).getRefreshToken());
 		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
 		return new ResponseEntity<>(employeeDto, HttpStatus.OK);
 	}
@@ -86,23 +86,5 @@ public class AuthenticationController {
 				.createEmployee(dataTransferService.mapEmployeeDtoToEmployee(employeeDto));
 		EmployeeDto savedEmployeeDto = dataTransferService.mapEmployeeToEmployeeDto(savedEmployee);
 		return new ResponseEntity<>(savedEmployeeDto, HttpStatus.CREATED);
-	}
-
-	@PostMapping(GlobalConstants.CHECK_TOKEN_VALIDITY_URL)
-	public ResponseEntity<Boolean> checkTokenValidity(@RequestBody TokenDto tokenDto) {
-		Boolean isTokenExpired = true;
-		try {
-			log.info("Validating Token...");
-			isTokenExpired = jwtUtil.isTokenExpired(tokenDto.getToken());
-		} catch (SignatureException e) {
-			log.info(GlobalConstants.JWT_SIGNATURE_EXCEPTION_MESSAGE);
-		} catch (MalformedJwtException e) {
-			log.info(GlobalConstants.JWT_MALFORMED_EXCEPTION_MESSAGE);
-		} catch (ExpiredJwtException e) {
-			log.info(GlobalConstants.JWT_EXPIRED_EXCEPTION_MESSAGE);
-		}
-		Boolean isTokenValid = !isTokenExpired;
-		log.info("Is Token Valid : " + isTokenValid);
-		return new ResponseEntity<>(isTokenValid, HttpStatus.OK);
 	}
 }

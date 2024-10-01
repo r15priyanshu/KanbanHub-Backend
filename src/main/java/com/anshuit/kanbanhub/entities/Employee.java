@@ -38,6 +38,9 @@ public class Employee {
 	@ManyToOne
 	@JoinColumn(name = "role_id")
 	private Role role;
+	
+	@OneToOne(mappedBy = "employee")
+	private RefreshToken refreshToken;
 
 	public Employee(String firstName, String lastName, String email, String password, Address address) {
 		this.firstName = firstName;

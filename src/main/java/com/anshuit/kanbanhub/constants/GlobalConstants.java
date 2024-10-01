@@ -5,7 +5,6 @@ import java.util.Set;
 
 public class GlobalConstants {
 	private GlobalConstants() {
-
 	}
 
 	public static final String DEFAULT_APPLICATION_NAME = "Kanban-Hub";
@@ -25,7 +24,9 @@ public class GlobalConstants {
 
 	public static final String JWT_DEFAULT_SECRET = "MY-CUSTOM-SECRET";
 	public static final String JWT_TOKEN_RESPONSE_HEADER_KEY = "Jwt-Token";
-	public static final long JWT_TOKEN_VALIDITY_IN_MILLISECONDS = 3 * 60 * 60 * 1000; // HR,MIN,SEC,MILLI
+	public static final String JWT_REFRESH_TOKEN_RESPONSE_HEADER_KEY = "Jwt-Refresh-Token";
+	public static final long JWT_TOKEN_VALIDITY_IN_MILLISECONDS = 1 * 2 * 60 * 1000; // HR,MIN,SEC,MILLI
+	public static final long JWT_REFRESH_TOKEN_VALIDITY_IN_MILLISECONDS = 1 * 10 * 60 * 1000; // HR,MIN,SEC,MILLI
 	public static final String JWT_SIGNATURE_EXCEPTION_MESSAGE = "JWT Signature Does Not Match Locally Computed signature !! Token Might Have Been Tampered !!";
 	public static final String JWT_MALFORMED_EXCEPTION_MESSAGE = "Token Malformed !! Token Might Have Been Tampered !!";
 	public static final String JWT_EXPIRED_EXCEPTION_MESSAGE = "Token Already Expired !!";
@@ -39,30 +40,36 @@ public class GlobalConstants {
 	public static final String EMPLOYEE_NOT_FOUND_WITH_EMAIL = "Employee not found with id : ";
 	public static final String EMPLOYEE_ALREADY_EXIST_WITH_EMAIL = "Employee already exist with email : ";
 	public static final String EMPLOYEE_ALREADY_ALLOCATED_TO_PROJECT = "Employee already added in this project with email : ";
-	public static final String PROFILE_PICTURE_SUCCESSFULLY_UPDATED= "Profile Picture Successfully Updated !!";
-	public static final String PROFILE_PICTURE_SUCCESSFULLY_REMOVED= "Profile Picture Successfully Removed !!";
-	public static final String PROFILE_PICTURE_NOT_PRESENT= "Profile Picture Not Present !!";
+	public static final String PROFILE_PICTURE_SUCCESSFULLY_UPDATED = "Profile Picture Successfully Updated !!";
+	public static final String PROFILE_PICTURE_SUCCESSFULLY_REMOVED = "Profile Picture Successfully Removed !!";
+	public static final String PROFILE_PICTURE_NOT_PRESENT = "Profile Picture Not Present !!";
 	public static final String ERROR_IN_UPDATING_PROFILE_PICTURE = "Error In Uploading Profile Picture !!";
 	public static final String NOT_AN_ALLOWED_IMAGE_EXTENSION = "Not An Allowed Image Extension !!";
+	public static final String REFRESH_TOKEN_NOT_FOUND_WITH_ID = "Refresh Token Not Found With Id : ";
+	public static final String REFRESH_TOKEN_NOT_FOUND_WITH_TOKEN = "Refresh Token Not Found With Token : ";
+	public static final String REFRESH_TOKEN_SUCCESSFULLY_DELETED = "Refresh Token Successfully Deleted !!";
+	public static final String REFRESH_TOKEN_EXPIRED_WITH_PERFORM_RE_LOGIN_MSG = "Refresh Token Already Expired !! Please Re-Login !!";
 
 	public static final String PROJECT_NOT_FOUND_WITH_ID = "Project not found with id : ";
 	public static final String TASK_NOT_FOUND_WITH_ID = "Task not found with id : ";
 
 	public static final String LOGIN_URL = "/auth/login";
 	public static final String REGISTER_URL = "/auth/register";
-	public static final String CHECK_TOKEN_VALIDITY_URL = "/auth/validateToken";
-	
+	public static final String CHECK_TOKEN_VALIDITY_URL = "/tokenAndRefreshToken/validateToken";
+	public static final String REFRESH_TOKEN_URL = "/tokenAndRefreshToken/refreshToken";
+	public static final String CHECK_REFRESH_TOKEN_VALIDITY_URL = "/tokenAndRefreshToken/validateRefreshToken";
+	public static final String DELETE_REFRESH_TOKEN_BY_TOKEN_STRING_IN_REQUEST_BODY_URL = "/tokenAndRefreshToken/deleteRefreshToken";
+
 	public static final String EXTENSION_JPG = ".jpg";
 	public static final String EXTENSION_JPEG = ".jpeg";
 	public static final String EXTENSION_PNG = ".png";
-	
-	//KEY USED FOR MAPS or DBS
+
+	// KEY USED FOR MAPS or DBS
 	public static final String KEY_EMPLOYEE_LCASE = "employee";
-	
-	//SET OF URLS FOR WHICH TOKEN VALIDATOR FILTER SHOULD NOT RUN
+
+	// SET OF URLS FOR WHICH TOKEN VALIDATOR FILTER SHOULD NOT RUN
 	public static final Set<String> EXCLUDED_PATHS_FOR_JWT_TOKEN_VALIDATOR_FILTER_SET = Set.of(
-	        GlobalConstants.LOGIN_URL,
-	        GlobalConstants.REGISTER_URL,
-	        GlobalConstants.CHECK_TOKEN_VALIDITY_URL
-	);
+			GlobalConstants.LOGIN_URL, GlobalConstants.REGISTER_URL, GlobalConstants.CHECK_TOKEN_VALIDITY_URL,
+			GlobalConstants.CHECK_REFRESH_TOKEN_VALIDITY_URL, GlobalConstants.REFRESH_TOKEN_URL,
+			GlobalConstants.DELETE_REFRESH_TOKEN_BY_TOKEN_STRING_IN_REQUEST_BODY_URL);
 }
