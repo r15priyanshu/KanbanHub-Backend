@@ -7,16 +7,19 @@ public class GlobalConstants {
 	private GlobalConstants() {
 	}
 
+	public static final String DEFAULT_EMPLOYEE_DISPLAY_ID_PREFIX = "EMP";	
 	public static final String DEFAULT_APPLICATION_NAME = "Kanban-Hub";
 	public static final String DEFAULT_FRONTEND_APPLICATION_NAME = "Kanban-Hub Frontend";
 	public static final String DEFAULT_FRONTEND_ORIGIN_URL = "http://localhost:4200";
 	public static final String DEFAULT_ROLE_ONE = "ROLE_NORMAL";
 	public static final String DEFAULT_ROLE_TWO = "ROLE_ADMIN";
+	public static final String DEFAULT_PROJECT_DISPLAY_ID_PREFIX = "PROJ";	
 	public static final String DEFAULT_PROJECT_ONE_NAME = "KANBAN-HUB FRONTEND";
 	public static final String DEFAULT_PROJECT_ONE_DESCRIPTION = "Develop the user interface for Kanban Hub with features including task boards, real-time updates, and drag-and-drop functionality.";
 	public static final String DEFAULT_PROJECT_TWO_NAME = "KANBAN-HUB BACKEND";
 	public static final String DEFAULT_PROJECT_TWO_DESCRIPTION = "Build a scalable API and database system for Kanban Hub to manage tasks, users, and real-time updates securely and efficiently.";
 	public static final String DEFAULT_PROFILE_PIC_NAME = "default.jpg";
+	public static final String DEFAULT_TASK_DISPLAY_ID_PREFIX = "TASK";	
 	public static final String TASK_STATUS_UN_ASSIGNED = "UN-ASSIGNED";
 	public static final String TASK_STATUS_IN_PROGRESS = "IN-PROGRESS";
 	public static final String TASK_STATUS_COMPLETED = "COMPLETED";
@@ -25,8 +28,8 @@ public class GlobalConstants {
 	public static final String JWT_DEFAULT_SECRET = "MY-CUSTOM-SECRET";
 	public static final String JWT_TOKEN_RESPONSE_HEADER_KEY = "Jwt-Token";
 	public static final String JWT_REFRESH_TOKEN_RESPONSE_HEADER_KEY = "Jwt-Refresh-Token";
-	public static final long JWT_TOKEN_VALIDITY_IN_MILLISECONDS = 1 * 2 * 60 * 1000; // HR,MIN,SEC,MILLI
-	public static final long JWT_REFRESH_TOKEN_VALIDITY_IN_MILLISECONDS = 1 * 10 * 60 * 1000; // HR,MIN,SEC,MILLI
+	public static final long JWT_TOKEN_VALIDITY_IN_MILLISECONDS = 1 * 60 * 60 * 1000; // HR,MIN,SEC,MILLI
+	public static final long JWT_REFRESH_TOKEN_VALIDITY_IN_MILLISECONDS = 2 * 60 * 60 * 1000; // HR,MIN,SEC,MILLI
 	public static final String JWT_SIGNATURE_EXCEPTION_MESSAGE = "JWT Signature Does Not Match Locally Computed signature !! Token Might Have Been Tampered !!";
 	public static final String JWT_MALFORMED_EXCEPTION_MESSAGE = "Token Malformed !! Token Might Have Been Tampered !!";
 	public static final String JWT_EXPIRED_EXCEPTION_MESSAGE = "Token Already Expired !!";
@@ -51,6 +54,7 @@ public class GlobalConstants {
 	public static final String REFRESH_TOKEN_EXPIRED_WITH_PERFORM_RE_LOGIN_MSG = "Refresh Token Already Expired !! Please Re-Login !!";
 
 	public static final String PROJECT_NOT_FOUND_WITH_ID = "Project not found with id : ";
+	public static final String PROJECT_NOT_FOUND_WITH_PROJECT_DISPLAY_ID = "Project not found with project display id : ";
 	public static final String TASK_NOT_FOUND_WITH_ID = "Task not found with id : ";
 
 	public static final String LOGIN_URL = "/auth/login";

@@ -42,6 +42,18 @@ public class ProjectServiceImpl {
 		return project;
 	}
 
+	public Project getProjectByProjectDisplayId(String projectDisplayId) {
+		Project project = projectRepository.findProjectByProjectDisplayId(projectDisplayId)
+				.orElseThrow(() -> new CustomException(
+						GlobalConstants.PROJECT_NOT_FOUND_WITH_PROJECT_DISPLAY_ID + projectDisplayId,
+						HttpStatus.NOT_FOUND));
+		LinkedHashSet<Task> sortedSet = project.getTasks().stream()
+				.sorted((task1, task2) -> -Integer.compare(task1.getTaskId(), task2.getTaskId())) // Sort by taskId
+				.collect(Collectors.toCollection(LinkedHashSet::new));
+		project.setTasks(sortedSet);
+		return project;
+	}
+
 	public Optional<Project> getProjectByIdOptional(int projectId) {
 		return projectRepository.findById(projectId);
 	}

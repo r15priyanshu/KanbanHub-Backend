@@ -12,7 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProjectDto {
-	private int projectId;
+	private int projectInternalId;
+	private String projectDisplayId;
 	private String projectName;
 	private String description;
 	private Date startDate;

@@ -44,10 +44,11 @@ public class ProjectController {
 		return new ResponseEntity<>(allProjectsDto, HttpStatus.OK);
 	}
 
-	@GetMapping("/{projectId}")
+	@GetMapping("/{projectDisplayId}")
 	@Transactional
-	public ResponseEntity<ProjectDto> getProjectById(@PathVariable("projectId") int projectId) throws InterruptedException {
-		Project project = projectService.getProjectById(projectId);
+	public ResponseEntity<ProjectDto> getProjectByProjectDisplayId(
+			@PathVariable("projectDisplayId") String projectDisplayId) throws InterruptedException {
+		Project project = projectService.getProjectByProjectDisplayId(projectDisplayId);
 		ProjectDto projectDto = dataTransferService.mapProjectToProjectDto(project);
 		return new ResponseEntity<>(projectDto, HttpStatus.OK);
 	}

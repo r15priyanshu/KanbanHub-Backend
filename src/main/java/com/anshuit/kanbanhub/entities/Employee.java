@@ -1,5 +1,7 @@
 package com.anshuit.kanbanhub.entities;
 
+import com.anshuit.kanbanhub.constants.GlobalConstants;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,8 +24,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Employee {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_sequence_generator")
+	@SequenceGenerator(name = "employee_sequence_generator", sequenceName = "employee_sequence", allocationSize = 1)
 	private int employeeId;
+	private String employeeDisplayId;
 	private String firstName;
 	private String lastName;
 	private String email;
@@ -48,5 +54,10 @@ public class Employee {
 		this.email = email;
 		this.password = password;
 		this.address = address;
+	}
+	
+	@PostPersist
+	private void assignEmployeeDisplayId() {
+		this.employeeDisplayId = GlobalConstants.DEFAULT_EMPLOYEE_DISPLAY_ID_PREFIX + this.employeeId;
 	}
 }

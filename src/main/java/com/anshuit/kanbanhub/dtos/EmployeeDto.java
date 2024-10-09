@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class EmployeeDto {
 	private int employeeId;
+	private String employeeDisplayId;
 	private String firstName;
 	private String lastName;
 	private String email;
