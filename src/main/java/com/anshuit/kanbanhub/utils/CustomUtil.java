@@ -27,4 +27,15 @@ public class CustomUtil {
 
 		return "";
 	}
+
+	public int extractProjectIdFromProjectDisplayId(String projectDisplayId) {
+		int projectId = Integer
+				.parseInt(projectDisplayId.substring(GlobalConstants.DEFAULT_PROJECT_DISPLAY_ID_PREFIX.length()));
+		return projectId;
+	}
+
+	public int extractTaskIdFromTaskDisplayId(String taskDisplayId) {
+		int taskId = Integer.parseInt(taskDisplayId.substring(GlobalConstants.DEFAULT_TASK_DISPLAY_ID_PREFIX.length()));
+		return taskId;
+	}
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.anshuit.kanbanhub.constants.GlobalConstants;
 import com.anshuit.kanbanhub.entities.Task;
+import com.anshuit.kanbanhub.enums.TaskStatusEnum;
 import com.anshuit.kanbanhub.exceptions.CustomException;
 import com.anshuit.kanbanhub.repositories.TaskRepository;
 
@@ -20,7 +21,7 @@ public class TaskServiceImpl {
 	private TaskRepository taskRepository;
 
 	public Task createTask(Task task) {
-		task.setTaskStatus(GlobalConstants.TASK_STATUS_UN_ASSIGNED);
+		task.setTaskStatus(TaskStatusEnum.UN_ASSIGNED);
 		task.setStartDate(new Date());
 		return taskRepository.save(task);
 	}
