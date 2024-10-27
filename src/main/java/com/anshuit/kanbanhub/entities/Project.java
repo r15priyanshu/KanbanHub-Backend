@@ -5,8 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.anshuit.kanbanhub.constants.GlobalConstants;
+import com.anshuit.kanbanhub.enums.ProjectStatusEnum;
+import com.anshuit.kanbanhub.enums.converters.ProjectStatusEnumDatabaseConverter;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +36,9 @@ public class Project {
 	private String description;
 	private Date startDate;
 	private Date endDate;
-	private boolean statusActive;
+	
+	@Convert(converter = ProjectStatusEnumDatabaseConverter.class)
+	private ProjectStatusEnum projectStatus;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "employees_projects", joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "projectId"), inverseJoinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "employeeId"))

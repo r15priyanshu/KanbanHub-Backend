@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.anshuit.kanbanhub.constants.GlobalConstants;
 import com.anshuit.kanbanhub.entities.Project;
 import com.anshuit.kanbanhub.entities.Task;
+import com.anshuit.kanbanhub.enums.ProjectStatusEnum;
 import com.anshuit.kanbanhub.exceptions.CustomException;
 import com.anshuit.kanbanhub.repositories.ProjectRepository;
 import com.anshuit.kanbanhub.utils.CustomUtil;
@@ -28,7 +29,7 @@ public class ProjectServiceImpl {
 
 	public Project createProject(Project project) {
 		project.setStartDate(new Date());
-		project.setStatusActive(true);
+		project.setProjectStatus(ProjectStatusEnum.INITIATED);
 		return projectRepository.save(project);
 	}
 
