@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.anshuit.kanbanhub.dtos.EmployeeDto;
-import com.anshuit.kanbanhub.dtos.ProjectDto;
+import com.anshuit.kanbanhub.dtos.ProjectDtoBase;
+import com.anshuit.kanbanhub.dtos.ProjectDtoFull;
 import com.anshuit.kanbanhub.dtos.TaskDto;
 import com.anshuit.kanbanhub.entities.Employee;
 import com.anshuit.kanbanhub.entities.Project;
@@ -25,11 +26,15 @@ public class DataTransferService {
 		return modelMapper.map(employeeDto, Employee.class);
 	}
 
-	public ProjectDto mapProjectToProjectDto(Project project) {
-		return modelMapper.map(project, ProjectDto.class);
+	public ProjectDtoFull mapProjectToProjectDtoFull(Project project) {
+		return modelMapper.map(project, ProjectDtoFull.class);
 	}
 
-	public Project mapProjectDtoToProject(ProjectDto projectDto) {
+	public ProjectDtoBase mapProjectToProjectDtoBase(Project project) {
+		return modelMapper.map(project, ProjectDtoBase.class);
+	}
+
+	public Project mapProjectDtoToProject(ProjectDtoBase projectDto) {
 		return modelMapper.map(projectDto, Project.class);
 	}
 

@@ -1,15 +1,13 @@
 package com.anshuit.kanbanhub.dtos;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ProjectDto {
+public class ProjectDtoBase {
 	private int projectId;
 	private String projectDisplayId;
 	private String projectName;
@@ -17,6 +15,4 @@ public class ProjectDto {
 	private Date startDate;
 	private Date endDate;
 	private String projectStatus;
-	private Set<EmployeeDto> employees;
-	private List<TaskDto> tasks;
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.anshuit.kanbanhub.dtos.ProjectDto;
+import com.anshuit.kanbanhub.dtos.ProjectDtoFull;
 import com.anshuit.kanbanhub.dtos.TaskDto;
 import com.anshuit.kanbanhub.entities.Project;
 import com.anshuit.kanbanhub.entities.Task;
@@ -28,32 +28,33 @@ public class BusinessOperationController {
 	private DataTransferService dataTransferService;
 
 	@GetMapping("/addemployee/{employeeId}/project/{projectId}")
-	public ResponseEntity<ProjectDto> addEmployeeToProject(@PathVariable("employeeId") int employeeId,
+	public ResponseEntity<ProjectDtoFull> addEmployeeToProject(@PathVariable("employeeId") int employeeId,
 			@PathVariable("projectId") int projectId) {
 		Project project = businessOperationService.addEmployeeToProject(employeeId, projectId);
-		ProjectDto projectDto = dataTransferService.mapProjectToProjectDto(project);
+		ProjectDtoFull projectDto = dataTransferService.mapProjectToProjectDtoFull(project);
 		return new ResponseEntity<>(projectDto, HttpStatus.OK);
 	}
 
 	@GetMapping("/addtask/{taskId}/project/{projectId}")
-	public ResponseEntity<ProjectDto> addTaskWithIdToProject(@PathVariable("taskId") int taskId,
+	public ResponseEntity<ProjectDtoFull> addTaskWithIdToProject(@PathVariable("taskId") int taskId,
 			@PathVariable("projectId") int projectId) {
 		Project project = businessOperationService.addTaskWithIdToProject(taskId, projectId);
-		ProjectDto projectDto = dataTransferService.mapProjectToProjectDto(project);
+		ProjectDtoFull projectDto = dataTransferService.mapProjectToProjectDtoFull(project);
 		return new ResponseEntity<>(projectDto, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/addtask/project/{projectId}")
-	public ResponseEntity<ProjectDto> addTaskToProject(@RequestBody TaskDto taskDto,
+	public ResponseEntity<ProjectDtoFull> addTaskToProject(@RequestBody TaskDto taskDto,
 			@PathVariable("projectId") int projectId) {
 		Task task = dataTransferService.mapTaskDtoToTask(taskDto);
 		Project project = businessOperationService.addTaskToProject(task, projectId);
-		ProjectDto projectDto = dataTransferService.mapProjectToProjectDto(project);
+		ProjectDtoFull projectDto = dataTransferService.mapProjectToProjectDtoFull(project);
 		return new ResponseEntity<>(projectDto, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/addemployee/{employeeId}/task/{taskId}")
-	public ResponseEntity<TaskDto> addEmployeeToTask(@PathVariable("employeeId") int employeeId,@PathVariable("taskId") int taskId) {
+	public ResponseEntity<TaskDto> addEmployeeToTask(@PathVariable("employeeId") int employeeId,
+			@PathVariable("taskId") int taskId) {
 		Task task = businessOperationService.addEmployeeToTask(employeeId, taskId);
 		TaskDto taskDto = dataTransferService.mapTaskToTaskDto(task);
 		return new ResponseEntity<>(taskDto, HttpStatus.OK);

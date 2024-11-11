@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.anshuit.kanbanhub.constants.GlobalConstants;
+import com.anshuit.kanbanhub.constants.JPAConstants;
 import com.anshuit.kanbanhub.entities.Project;
 import com.anshuit.kanbanhub.entities.Task;
 import com.anshuit.kanbanhub.enums.ProjectStatusEnum;
@@ -34,7 +35,11 @@ public class ProjectServiceImpl {
 	}
 
 	public List<Project> getAllProjects() {
-		return projectRepository.findAll();
+		return projectRepository.findAll(JPAConstants.SORT_PROJECT_BY_ID_DESC);
+	}
+
+	public List<Project> getAllProjectsPartial() {
+		return projectRepository.findAllPartial(JPAConstants.SORT_PROJECT_BY_ID_DESC);
 	}
 
 	public Project getProjectById(int projectId) {
