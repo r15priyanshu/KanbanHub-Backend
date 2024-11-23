@@ -29,8 +29,8 @@ public class ProjectServiceImpl {
 	private CustomUtil customUtil;
 
 	public Project createProject(Project project) {
-		project.setStartDate(new Date());
-		project.setProjectStatus(ProjectStatusEnum.INITIATED);
+		project.setCreatedDate(new Date());
+		project.setProjectStatus(ProjectStatusEnum.CREATED);
 		return projectRepository.save(project);
 	}
 

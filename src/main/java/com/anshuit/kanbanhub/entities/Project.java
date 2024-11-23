@@ -34,6 +34,7 @@ public class Project {
 	private transient String projectDisplayId;
 	private String projectName;
 	private String description;
+	private Date createdDate;
 	private Date startDate;
 	private Date endDate;
 	

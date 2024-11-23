@@ -12,6 +12,7 @@ public class ProjectDtoBase {
 	private String projectDisplayId;
 	private String projectName;
 	private String description;
+	private Date createdDate;
 	private Date startDate;
 	private Date endDate;
 	private String projectStatus;
