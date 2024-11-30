@@ -21,7 +21,7 @@ public class TaskController {
 
 	@Autowired
 	private TaskServiceImpl taskService;
-	
+
 	@Autowired
 	private DataTransferService dataTransferService;
 
@@ -39,9 +39,9 @@ public class TaskController {
 		return new ResponseEntity<>(allTasksDto, HttpStatus.OK);
 	}
 
-	@GetMapping("/task/{taskId}")
-	public ResponseEntity<TaskDto> getTaskById(@PathVariable("taskId") int taskId) {
-		Task task = taskService.getTaskById(taskId);
+	@GetMapping("/task/{taskDisplayId}")
+	public ResponseEntity<TaskDto> getTaskById(@PathVariable("taskDisplayId") String taskDisplayId) {
+		Task task = taskService.getTaskByTaskDisplayId(taskDisplayId);
 		TaskDto taskDto = dataTransferService.mapTaskToTaskDto(task);
 		return new ResponseEntity<>(taskDto, HttpStatus.OK);
 	}

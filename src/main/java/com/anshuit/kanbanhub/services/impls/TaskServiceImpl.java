@@ -20,6 +20,10 @@ public class TaskServiceImpl {
 	@Autowired
 	private TaskRepository taskRepository;
 
+	public Task save(Task task) {
+		return taskRepository.save(task);
+	}
+
 	public Task createTask(Task task) {
 		task.setTaskStatus(TaskStatusEnum.UN_ASSIGNED);
 		task.setStartDate(new Date());
@@ -30,12 +34,26 @@ public class TaskServiceImpl {
 		return taskRepository.findAll();
 	}
 
-	public Task getTaskById(int taskId) {
-		return taskRepository.findById(taskId).orElseThrow(
-				() -> new CustomException(GlobalConstants.TASK_NOT_FOUND_WITH_ID + taskId, HttpStatus.NOT_FOUND));
+	public Task getTaskByTaskDisplayId(String taskDisplayId) {
+		int taskId = this.extractTaskIdFromTaskDisplayId(taskDisplayId);
+		return this.getTaskByIdOptional(taskId).orElseThrow(() -> new CustomException(
+				GlobalConstants.TASK_NOT_FOUND_WITH_TASK_DISPLAY_ID + taskDisplayId, HttpStatus.NOT_FOUND));
 	}
 
 	public Optional<Task> getTaskByIdOptional(int taskId) {
 		return taskRepository.findById(taskId);
+	}
+
+	public int extractTaskIdFromTaskDisplayId(String taskDisplayId) {
+		if (!taskDisplayId.startsWith(GlobalConstants.DEFAULT_TASK_DISPLAY_ID_PREFIX)) {
+			throw new CustomException(GlobalConstants.TASK_DISPLAY_ID_NOT_STARTING_WITH_PREFIX, HttpStatus.BAD_REQUEST);
+		}
+
+		try {
+			return Integer.parseInt(taskDisplayId.substring(GlobalConstants.DEFAULT_TASK_DISPLAY_ID_PREFIX.length()));
+		} catch (NumberFormatException e) {
+			throw new CustomException(GlobalConstants.TASK_ID_FROM_TASK_DISPLAY_ID_PARSING_ERROR,
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 }

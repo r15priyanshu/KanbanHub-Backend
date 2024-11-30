@@ -9,38 +9,23 @@ import com.anshuit.kanbanhub.entities.Employee;
 import com.anshuit.kanbanhub.entities.Project;
 import com.anshuit.kanbanhub.entities.Task;
 import com.anshuit.kanbanhub.exceptions.CustomException;
-import com.anshuit.kanbanhub.repositories.EmployeeRepository;
-import com.anshuit.kanbanhub.repositories.ProjectRepository;
-import com.anshuit.kanbanhub.repositories.TaskRepository;
 
 @Service
 public class BusinessOperationServiceImpl {
 
 	@Autowired
-	private EmployeeRepository employeeRepository;
-
-	@Autowired
-	private ProjectRepository projectRepository;
-
-	@Autowired
-	private TaskRepository taskRepository;
-	
-	@Autowired
 	private TaskServiceImpl taskService;
-	
+
 	@Autowired
 	private EmployeeServiceImpl employeeService;
-	
+
 	@Autowired
 	private ProjectServiceImpl projectService;
 
-	public Project addEmployeeToProject(int employeeId, int projectId) {
-		Employee employee = employeeRepository.findById(employeeId)
-				.orElseThrow(() -> new CustomException(GlobalConstants.EMPLOYEE_NOT_FOUND_WITH_ID + employeeId,
-						HttpStatus.NOT_FOUND));
+	public Project addEmployeeToProjectByDisplayId(int employeeId, String projectDisplayId) {
+		Employee employee = employeeService.getEmployeeById(employeeId);
 
-		Project project = projectRepository.findById(projectId).orElseThrow(
-				() -> new CustomException(GlobalConstants.PROJECT_NOT_FOUND_WITH_ID + projectId, HttpStatus.NOT_FOUND));
+		Project project = projectService.getProjectByProjectDisplayId(projectDisplayId);
 
 		for (Employee employeeInProject : project.getEmployees()) {
 			if (employeeInProject.getEmployeeId() == employeeId) {
@@ -50,35 +35,31 @@ public class BusinessOperationServiceImpl {
 		}
 
 		project.getEmployees().add(employee);
-		Project updatedProject = projectRepository.save(project);
+		Project updatedProject = projectService.save(project);
 		return updatedProject;
 	}
 
-	public Project addTaskWithIdToProject(int taskId, int projectId) {
-		Task task = taskRepository.findById(taskId).orElseThrow(
-				() -> new CustomException(GlobalConstants.TASK_NOT_FOUND_WITH_ID + taskId, HttpStatus.NOT_FOUND));
-
-		Project project = projectRepository.findById(projectId).orElseThrow(
-				() -> new CustomException(GlobalConstants.PROJECT_NOT_FOUND_WITH_ID + projectId, HttpStatus.NOT_FOUND));
-		
+	public Project addTaskWithIdToProjectWithIdByDisplayId(String taskDisplayId, String projectDisplayId) {
+		Task task = taskService.getTaskByTaskDisplayId(taskDisplayId);
+		Project project = projectService.getProjectByProjectDisplayId(projectDisplayId);
 		project.getTasks().add(task);
-		Project updatedProject = projectRepository.save(project);
+		Project updatedProject = projectService.save(project);
 		return updatedProject;
 	}
 
-	public Project addTaskToProject(Task task, int projectId) {
-		Project project = projectService.getProjectById(projectId);
+	public Project addTaskToProjectByDisplayId(Task task, String projectDisplayId) {
+		Project project = projectService.getProjectByProjectDisplayId(projectDisplayId);
 		Task savedTask = taskService.createTask(task);
 		project.getTasks().add(savedTask);
-		Project updatedProject = projectRepository.save(project);
+		Project updatedProject = projectService.save(project);
 		return updatedProject;
 	}
 
-	public Task addEmployeeToTask(int employeeId, int taskId) {
-		Task task = taskService.getTaskById(taskId);
+	public Task addEmployeeToTaskByDisplayId(int employeeId, String taskDisplayId) {
+		Task task = taskService.getTaskByTaskDisplayId(taskDisplayId);
 		Employee employee = employeeService.getEmployeeById(employeeId);
 		task.setEmployee(employee);
-		Task updatedTask = taskRepository.save(task);
+		Task updatedTask = taskService.save(task);
 		return updatedTask;
 	}
 }

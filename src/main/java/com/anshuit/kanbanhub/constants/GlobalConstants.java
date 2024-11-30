@@ -13,7 +13,7 @@ public class GlobalConstants {
 	public static final String DEFAULT_FRONTEND_ORIGIN_URL = "http://localhost:4200";
 	public static final String DEFAULT_ROLE_ONE = "ROLE_NORMAL";
 	public static final String DEFAULT_ROLE_TWO = "ROLE_ADMIN";
-	public static final String DEFAULT_PROJECT_DISPLAY_ID_PREFIX = "PROJ";
+	public static final String DEFAULT_PROJECT_DISPLAY_ID_PREFIX = "KBH";
 	public static final String DEFAULT_PROJECT_ONE_NAME = "KANBAN-HUB FRONTEND";
 	public static final String DEFAULT_PROJECT_ONE_DESCRIPTION = "Develop the user interface for Kanban Hub with features including task boards, real-time updates, and drag-and-drop functionality.";
 	public static final String DEFAULT_PROJECT_TWO_NAME = "KANBAN-HUB BACKEND";
@@ -52,7 +52,14 @@ public class GlobalConstants {
 
 	public static final String PROJECT_NOT_FOUND_WITH_ID = "Project not found with id : ";
 	public static final String PROJECT_NOT_FOUND_WITH_PROJECT_DISPLAY_ID = "Project not found with project display id : ";
+	public static final String PROJECT_DISPLAY_ID_NOT_STARTING_WITH_PREFIX = "Project display id not starting with : "
+			+ DEFAULT_PROJECT_DISPLAY_ID_PREFIX;
+	public static final String PROJECT_ID_FROM_PROJECT_DISPLAY_ID_PARSING_ERROR = "Error while parsing projectId from projectDisplayId";
 	public static final String TASK_NOT_FOUND_WITH_ID = "Task not found with id : ";
+	public static final String TASK_NOT_FOUND_WITH_TASK_DISPLAY_ID = "Task not found with task display id : ";
+	public static final String TASK_DISPLAY_ID_NOT_STARTING_WITH_PREFIX = "Task display id not starting with : "
+			+ DEFAULT_TASK_DISPLAY_ID_PREFIX;
+	public static final String TASK_ID_FROM_TASK_DISPLAY_ID_PARSING_ERROR = "Error while parsing taskId from taskDisplayId";
 
 	public static final String LOGIN_URL = "/auth/login";
 	public static final String REGISTER_URL = "/auth/register";

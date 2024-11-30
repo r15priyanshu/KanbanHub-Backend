@@ -27,35 +27,36 @@ public class BusinessOperationController {
 	@Autowired
 	private DataTransferService dataTransferService;
 
-	@GetMapping("/addemployee/{employeeId}/project/{projectId}")
+	@GetMapping("/addemployee/{employeeId}/project/{projectDisplayId}")
 	public ResponseEntity<ProjectDtoFull> addEmployeeToProject(@PathVariable("employeeId") int employeeId,
-			@PathVariable("projectId") int projectId) {
-		Project project = businessOperationService.addEmployeeToProject(employeeId, projectId);
+			@PathVariable("projectDisplayId") String projectDisplayId) {
+		Project project = businessOperationService.addEmployeeToProjectByDisplayId(employeeId, projectDisplayId);
 		ProjectDtoFull projectDto = dataTransferService.mapProjectToProjectDtoFull(project);
 		return new ResponseEntity<>(projectDto, HttpStatus.OK);
 	}
 
-	@GetMapping("/addtask/{taskId}/project/{projectId}")
-	public ResponseEntity<ProjectDtoFull> addTaskWithIdToProject(@PathVariable("taskId") int taskId,
-			@PathVariable("projectId") int projectId) {
-		Project project = businessOperationService.addTaskWithIdToProject(taskId, projectId);
+	@GetMapping("/addtask/{taskDisplayId}/project/{projectDisplayId}")
+	public ResponseEntity<ProjectDtoFull> addTaskWithIdToProject(@PathVariable("taskDisplayId") String taskDisplayId,
+			@PathVariable("projectDisplayId") String projectDisplayId) {
+		Project project = businessOperationService.addTaskWithIdToProjectWithIdByDisplayId(taskDisplayId,
+				projectDisplayId);
 		ProjectDtoFull projectDto = dataTransferService.mapProjectToProjectDtoFull(project);
 		return new ResponseEntity<>(projectDto, HttpStatus.OK);
 	}
 
-	@PostMapping("/addtask/project/{projectId}")
+	@PostMapping("/addtask/project/{projectDisplayId}")
 	public ResponseEntity<ProjectDtoFull> addTaskToProject(@RequestBody TaskDto taskDto,
-			@PathVariable("projectId") int projectId) {
+			@PathVariable("projectDisplayId") String projectDisplayId) {
 		Task task = dataTransferService.mapTaskDtoToTask(taskDto);
-		Project project = businessOperationService.addTaskToProject(task, projectId);
+		Project project = businessOperationService.addTaskToProjectByDisplayId(task, projectDisplayId);
 		ProjectDtoFull projectDto = dataTransferService.mapProjectToProjectDtoFull(project);
 		return new ResponseEntity<>(projectDto, HttpStatus.OK);
 	}
 
-	@GetMapping("/addemployee/{employeeId}/task/{taskId}")
+	@GetMapping("/addemployee/{employeeId}/task/{taskDisplayId}")
 	public ResponseEntity<TaskDto> addEmployeeToTask(@PathVariable("employeeId") int employeeId,
-			@PathVariable("taskId") int taskId) {
-		Task task = businessOperationService.addEmployeeToTask(employeeId, taskId);
+			@PathVariable("taskDisplayId") String taskDisplayId) {
+		Task task = businessOperationService.addEmployeeToTaskByDisplayId(employeeId, taskDisplayId);
 		TaskDto taskDto = dataTransferService.mapTaskToTaskDto(task);
 		return new ResponseEntity<>(taskDto, HttpStatus.OK);
 	}
