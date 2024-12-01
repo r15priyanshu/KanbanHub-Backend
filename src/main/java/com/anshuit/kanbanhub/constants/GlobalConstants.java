@@ -37,9 +37,13 @@ public class GlobalConstants {
 	public static final List<String> EXPOSED_HEADERS_LIST = List.of("*");
 
 	public static final String EMPLOYEE_NOT_FOUND_WITH_ID = "Employee not found with id : ";
+	public static final String EMPLOYEE_NOT_FOUND_WITH_DISPLAY_ID = "Employee not found with display id : ";
 	public static final String EMPLOYEE_NOT_FOUND_WITH_EMAIL = "Employee not found with id : ";
 	public static final String EMPLOYEE_ALREADY_EXIST_WITH_EMAIL = "Employee already exist with email : ";
 	public static final String EMPLOYEE_ALREADY_ALLOCATED_TO_PROJECT = "Employee already added in this project with email : ";
+	public static final String EMPLOYEE_DISPLAY_ID_NOT_STARTING_WITH_PREFIX = "Employee display id not starting with : "
+			+ DEFAULT_EMPLOYEE_DISPLAY_ID_PREFIX;
+	public static final String EMPLOYEE_ID_FROM_EMPLOYEE_DISPLAY_ID_PARSING_ERROR = "Error while parsing employeeId from employeeDisplayId";
 	public static final String PROFILE_PICTURE_SUCCESSFULLY_UPDATED = "Profile Picture Successfully Updated !!";
 	public static final String PROFILE_PICTURE_SUCCESSFULLY_REMOVED = "Profile Picture Successfully Removed !!";
 	public static final String PROFILE_PICTURE_NOT_PRESENT = "Profile Picture Not Present !!";

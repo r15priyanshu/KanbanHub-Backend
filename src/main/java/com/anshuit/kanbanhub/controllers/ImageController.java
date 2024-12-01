@@ -20,9 +20,9 @@ public class ImageController {
 	@Autowired
 	private EmployeeServiceImpl employeeService;
 
-	@GetMapping(value = "serveProfilePicture/employee/{employeeId}")
-	public ResponseEntity<byte[]> serveProfilePicture(@PathVariable("employeeId") Integer employeeId) {
-		byte[] profilePicData = employeeService.getEmployeeProfilePicData(employeeId);
+	@GetMapping(value = "serveProfilePicture/employee/{employeeDisplayId}")
+	public ResponseEntity<byte[]> serveProfilePicture(@PathVariable("employeeDisplayId") String employeeDisplayId) {
+		byte[] profilePicData = employeeService.getEmployeeProfilePicDataByEmployeeDisplayId(employeeDisplayId);
 		String contentType = new Tika().detect(profilePicData);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType(contentType));

@@ -27,10 +27,12 @@ public class BusinessOperationController {
 	@Autowired
 	private DataTransferService dataTransferService;
 
-	@GetMapping("/addemployee/{employeeId}/project/{projectDisplayId}")
-	public ResponseEntity<ProjectDtoFull> addEmployeeToProject(@PathVariable("employeeId") int employeeId,
+	@GetMapping("/addemployee/{employeeDisplayId}/project/{projectDisplayId}")
+	public ResponseEntity<ProjectDtoFull> addEmployeeToProject(
+			@PathVariable("employeeDisplayId") String employeeDisplayId,
 			@PathVariable("projectDisplayId") String projectDisplayId) {
-		Project project = businessOperationService.addEmployeeToProjectByDisplayId(employeeId, projectDisplayId);
+		Project project = businessOperationService.addEmployeeToProjectByDisplayIds(employeeDisplayId,
+				projectDisplayId);
 		ProjectDtoFull projectDto = dataTransferService.mapProjectToProjectDtoFull(project);
 		return new ResponseEntity<>(projectDto, HttpStatus.OK);
 	}
@@ -53,10 +55,10 @@ public class BusinessOperationController {
 		return new ResponseEntity<>(projectDto, HttpStatus.OK);
 	}
 
-	@GetMapping("/addemployee/{employeeId}/task/{taskDisplayId}")
-	public ResponseEntity<TaskDto> addEmployeeToTask(@PathVariable("employeeId") int employeeId,
+	@GetMapping("/addemployee/{employeeDisplayId}/task/{taskDisplayId}")
+	public ResponseEntity<TaskDto> addEmployeeToTask(@PathVariable("employeeDisplayId") String employeeDisplayId,
 			@PathVariable("taskDisplayId") String taskDisplayId) {
-		Task task = businessOperationService.addEmployeeToTaskByDisplayId(employeeId, taskDisplayId);
+		Task task = businessOperationService.addEmployeeToTaskByDisplayIds(employeeDisplayId, taskDisplayId);
 		TaskDto taskDto = dataTransferService.mapTaskToTaskDto(task);
 		return new ResponseEntity<>(taskDto, HttpStatus.OK);
 	}

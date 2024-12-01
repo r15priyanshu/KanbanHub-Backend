@@ -22,13 +22,13 @@ public class BusinessOperationServiceImpl {
 	@Autowired
 	private ProjectServiceImpl projectService;
 
-	public Project addEmployeeToProjectByDisplayId(int employeeId, String projectDisplayId) {
-		Employee employee = employeeService.getEmployeeById(employeeId);
+	public Project addEmployeeToProjectByDisplayIds(String employeeDisplayId, String projectDisplayId) {
+		Employee employee = employeeService.getEmployeeByEmployeeDisplayId(employeeDisplayId);
 
 		Project project = projectService.getProjectByProjectDisplayId(projectDisplayId);
 
 		for (Employee employeeInProject : project.getEmployees()) {
-			if (employeeInProject.getEmployeeId() == employeeId) {
+			if (employeeInProject.getEmployeeDisplayId().equals(employeeDisplayId)) {
 				throw new CustomException(GlobalConstants.EMPLOYEE_ALREADY_ALLOCATED_TO_PROJECT + employee.getEmail(),
 						HttpStatus.BAD_REQUEST);
 			}
@@ -55,9 +55,9 @@ public class BusinessOperationServiceImpl {
 		return updatedProject;
 	}
 
-	public Task addEmployeeToTaskByDisplayId(int employeeId, String taskDisplayId) {
+	public Task addEmployeeToTaskByDisplayIds(String employeeDisplayId, String taskDisplayId) {
 		Task task = taskService.getTaskByTaskDisplayId(taskDisplayId);
-		Employee employee = employeeService.getEmployeeById(employeeId);
+		Employee employee = employeeService.getEmployeeByEmployeeDisplayId(employeeDisplayId);
 		task.setEmployee(employee);
 		Task updatedTask = taskService.save(task);
 		return updatedTask;

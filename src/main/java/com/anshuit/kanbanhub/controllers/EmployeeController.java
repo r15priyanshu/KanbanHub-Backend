@@ -53,27 +53,27 @@ public class EmployeeController {
 		return new ResponseEntity<>(allEmployeesDto, HttpStatus.OK);
 	}
 
-	@GetMapping("/{employeeId}")
-	public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable("employeeId") int employeeId) {
-		Employee employee = employeeService.getEmployeeById(employeeId);
+	@GetMapping("/{employeeDisplayId}")
+	public ResponseEntity<EmployeeDto> getEmployeeByEmployeeDisplayId(@PathVariable("employeeDisplayId") String employeeDisplayId) {
+		Employee employee = employeeService.getEmployeeByEmployeeDisplayId(employeeDisplayId);
 		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
 		return new ResponseEntity<>(employeeDto, HttpStatus.OK);
 	}
 
-	@PutMapping("/{employeeId}")
-	public ResponseEntity<EmployeeDto> updateEmployeeById(@RequestBody EmployeeDto employeeDto,
-			@PathVariable("employeeId") int employeeId) {
-		Employee updatedEmployee = employeeService
-				.updateEmployeeById(dataTransferService.mapEmployeeDtoToEmployee(employeeDto), employeeId);
+	@PutMapping("/{employeeDisplayId}")
+	public ResponseEntity<EmployeeDto> updateEmployeeByEmployeeDisplayId(@RequestBody EmployeeDto employeeDto,
+			@PathVariable("employeeDisplayId") String employeeDisplayId) {
+		Employee updatedEmployee = employeeService.updateEmployeeByEmployeeDisplayId(
+				dataTransferService.mapEmployeeDtoToEmployee(employeeDto), employeeDisplayId);
 		EmployeeDto updatedEmployeeDto = dataTransferService.mapEmployeeToEmployeeDto(updatedEmployee);
 		return new ResponseEntity<>(updatedEmployeeDto, HttpStatus.OK);
 	}
 
-	@PostMapping("/updateProfilePicture/{employeeId}")
-	public ResponseEntity<ApiResponseDto> updateProfilePictureByEmployeeId(@RequestParam("image") MultipartFile image,
-			@PathVariable("employeeId") Integer employeeId, HttpServletRequest request) {
+	@PostMapping("/updateProfilePicture/{employeeDisplayId}")
+	public ResponseEntity<ApiResponseDto> updateProfilePictureByEmployeeDisplayId(@RequestParam("image") MultipartFile image,
+			@PathVariable("employeeDisplayId") String employeeDisplayId, HttpServletRequest request) {
 
-		Employee employee = employeeService.updateProfilePictureByEmployeeId(image, employeeId);
+		Employee employee = employeeService.updateProfilePictureByEmployeeDisplayId(image, employeeDisplayId);
 		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
 		ApiResponseDto apiResponseDto = ApiResponseDto.builder()
 				.message(GlobalConstants.PROFILE_PICTURE_SUCCESSFULLY_UPDATED).timestamp(LocalDateTime.now())
@@ -82,10 +82,10 @@ public class EmployeeController {
 		return new ResponseEntity<ApiResponseDto>(apiResponseDto, HttpStatus.CREATED);
 	}
 
-	@PutMapping("/removeProfilePicture/{employeeId}")
-	public ResponseEntity<ApiResponseDto> removeProfilePictureByEmployeeId(
-			@PathVariable("employeeId") Integer employeeId, HttpServletRequest request) {
-		Employee employee = employeeService.removeProfilePictureByEmployeeId(employeeId);
+	@PutMapping("/removeProfilePicture/{employeeDisplayId}")
+	public ResponseEntity<ApiResponseDto> removeProfilePictureByEmployeeDisplayId(
+			@PathVariable("employeeDisplayId") String employeeDisplayId, HttpServletRequest request) {
+		Employee employee = employeeService.removeProfilePictureByEmployeeDisplayId(employeeDisplayId);
 		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
 		ApiResponseDto apiResponseDto = ApiResponseDto.builder()
 				.message(GlobalConstants.PROFILE_PICTURE_SUCCESSFULLY_REMOVED).timestamp(LocalDateTime.now())
@@ -94,9 +94,9 @@ public class EmployeeController {
 		return new ResponseEntity<ApiResponseDto>(apiResponseDto, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/{employeeId}")
-	public ResponseEntity<EmployeeDto> deleteEmployeeById(@PathVariable("employeeId") int employeeId) {
-		Employee employee = employeeService.deleteEmployeeById(employeeId);
+	@DeleteMapping("/{employeeDisplayId}")
+	public ResponseEntity<EmployeeDto> deleteEmployeeByEmployeeDisplayId(@PathVariable("employeeDisplayId") String employeeDisplayId) {
+		Employee employee = employeeService.deleteEmployeeByEmployeeDisplayId(employeeDisplayId);
 		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
 		return new ResponseEntity<>(employeeDto, HttpStatus.OK);
 	}

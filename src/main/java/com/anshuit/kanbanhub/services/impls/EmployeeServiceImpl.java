@@ -53,10 +53,10 @@ public class EmployeeServiceImpl {
 
 	}
 
-	public Employee getEmployeeById(int employeeId) {
-		return employeeRepository.findById(employeeId)
-				.orElseThrow(() -> new CustomException(GlobalConstants.EMPLOYEE_NOT_FOUND_WITH_ID + employeeId,
-						HttpStatus.NOT_FOUND));
+	public Employee getEmployeeByEmployeeDisplayId(String employeeDisplayId) {
+		int employeeId = this.extractEmployeeIdFromEmployeeDisplayId(employeeDisplayId);
+		return employeeRepository.findById(employeeId).orElseThrow(() -> new CustomException(
+				GlobalConstants.EMPLOYEE_NOT_FOUND_WITH_DISPLAY_ID + employeeDisplayId, HttpStatus.NOT_FOUND));
 	}
 
 	public Optional<Employee> getEmployeeByIdOptinal(int employeeId) {
@@ -72,26 +72,17 @@ public class EmployeeServiceImpl {
 		return employeeRepository.findByEmail(email);
 	}
 
-	public Employee updateEmployeeById(Employee employee, int employeeId) {
-		Optional<Employee> optional = employeeRepository.findById(employeeId);
-		if (optional.isEmpty()) {
-			throw new CustomException(GlobalConstants.EMPLOYEE_NOT_FOUND_WITH_ID + employeeId, HttpStatus.NOT_FOUND);
-		}
-
-		Employee foundEmployee = optional.get();
+	public Employee updateEmployeeByEmployeeDisplayId(Employee employee, String employeeDisplayId) {
+		Employee foundEmployee = this.getEmployeeByEmployeeDisplayId(employeeDisplayId);
 		foundEmployee.setFirstName(employee.getFirstName());
 		foundEmployee.setLastName(employee.getLastName());
 		foundEmployee.getAddress().setCity(employee.getAddress().getCity());
 		foundEmployee.getAddress().setState(employee.getAddress().getState());
-
 		return employeeRepository.save(foundEmployee);
 	}
 
-	public Employee updateProfilePictureByEmployeeId(MultipartFile file, Integer employeeId) {
-		Employee employee = employeeRepository.findById(employeeId)
-				.orElseThrow(() -> new CustomException(GlobalConstants.EMPLOYEE_NOT_FOUND_WITH_ID + employeeId,
-						HttpStatus.NOT_FOUND));
-
+	public Employee updateProfilePictureByEmployeeDisplayId(MultipartFile file, String employeeDisplayId) {
+		Employee employee = this.getEmployeeByEmployeeDisplayId(employeeDisplayId);
 		String filename = file.getOriginalFilename();
 		if (file != null && customUtil.isImageHavingValidExtension(filename)) {
 			try {
@@ -108,28 +99,24 @@ public class EmployeeServiceImpl {
 		}
 		return employeeRepository.save(employee);
 	}
-	
-	public Employee removeProfilePictureByEmployeeId(Integer employeeId) {
-		Employee employee = employeeRepository.findById(employeeId)
-				.orElseThrow(() -> new CustomException(GlobalConstants.EMPLOYEE_NOT_FOUND_WITH_ID + employeeId,
-						HttpStatus.NOT_FOUND));
 
+	public Employee removeProfilePictureByEmployeeDisplayId(String employeeDisplayId) {
+		Employee employee = this.getEmployeeByEmployeeDisplayId(employeeDisplayId);
 		employee.setProfilePic(GlobalConstants.DEFAULT_PROFILE_PIC_NAME);
 		employee.setProfilePicData(null);
 		return employeeRepository.save(employee);
 	}
 
-	public byte[] getEmployeeProfilePicData(int employeeId) {
-		Employee employee = this.getEmployeeById(employeeId);
+	public byte[] getEmployeeProfilePicDataByEmployeeDisplayId(String employeeDisplayId) {
+		Employee employee = this.getEmployeeByEmployeeDisplayId(employeeDisplayId);
 		if (employee == null || employee.getProfilePicData() == null) {
 			throw new CustomException(GlobalConstants.PROFILE_PICTURE_NOT_PRESENT, HttpStatus.NOT_FOUND);
 		}
-
 		return employee.getProfilePicData();
 	}
 
-	public Employee deleteEmployeeById(int employeeId) {
-		Employee employee = this.getEmployeeById(employeeId);
+	public Employee deleteEmployeeByEmployeeDisplayId(String employeeDisplayId) {
+		Employee employee = this.getEmployeeByEmployeeDisplayId(employeeDisplayId);
 		employee.setRole(null);
 		employeeRepository.delete(employee);
 		return employee;
@@ -142,5 +129,20 @@ public class EmployeeServiceImpl {
 		}
 		employeeRepository.deleteAll(allEmployees);
 		return allEmployees;
+	}
+
+	public int extractEmployeeIdFromEmployeeDisplayId(String employeeDisplayId) {
+		if (!employeeDisplayId.startsWith(GlobalConstants.DEFAULT_EMPLOYEE_DISPLAY_ID_PREFIX)) {
+			throw new CustomException(GlobalConstants.EMPLOYEE_DISPLAY_ID_NOT_STARTING_WITH_PREFIX,
+					HttpStatus.BAD_REQUEST);
+		}
+
+		try {
+			return Integer
+					.parseInt(employeeDisplayId.substring(GlobalConstants.DEFAULT_EMPLOYEE_DISPLAY_ID_PREFIX.length()));
+		} catch (NumberFormatException e) {
+			throw new CustomException(GlobalConstants.EMPLOYEE_ID_FROM_EMPLOYEE_DISPLAY_ID_PARSING_ERROR,
+					HttpStatus.BAD_REQUEST);
+		}
 	}
 }
