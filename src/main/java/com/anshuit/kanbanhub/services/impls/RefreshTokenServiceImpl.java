@@ -13,6 +13,7 @@ import com.anshuit.kanbanhub.constants.GlobalConstants;
 import com.anshuit.kanbanhub.dtos.TokenDto;
 import com.anshuit.kanbanhub.entities.Employee;
 import com.anshuit.kanbanhub.entities.RefreshToken;
+import com.anshuit.kanbanhub.enums.ExceptionDetailsEnum;
 import com.anshuit.kanbanhub.exceptions.CustomException;
 import com.anshuit.kanbanhub.repositories.RefreshTokenRepository;
 import com.anshuit.kanbanhub.security.MyJwtUtil;
@@ -77,16 +78,16 @@ public class RefreshTokenServiceImpl {
 	}
 
 	public RefreshToken findRefreshTokenByRefreshTokenString(String refreshToken) {
-		RefreshToken foundRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken).orElseThrow(
-				() -> new CustomException(GlobalConstants.REFRESH_TOKEN_NOT_FOUND_WITH_TOKEN + refreshToken,
-						HttpStatus.NOT_FOUND));
+		RefreshToken foundRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken)
+				.orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND,
+						ExceptionDetailsEnum.REFRESH_TOKEN_NOT_FOUND_WITH_TOKEN, refreshToken));
 		return foundRefreshToken;
 	}
 
 	public RefreshToken findRefreshTokenById(Integer refreshTokenId) {
 		RefreshToken foundRefreshToken = refreshTokenRepository.findById(refreshTokenId)
-				.orElseThrow(() -> new CustomException(GlobalConstants.REFRESH_TOKEN_NOT_FOUND_WITH_ID + refreshTokenId,
-						HttpStatus.NOT_FOUND));
+				.orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND,
+						ExceptionDetailsEnum.REFRESH_TOKEN_NOT_FOUND_WITH_ID, refreshTokenId));
 		return foundRefreshToken;
 	}
 

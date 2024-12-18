@@ -22,6 +22,7 @@ import com.anshuit.kanbanhub.constants.GlobalConstants;
 import com.anshuit.kanbanhub.dtos.ApiResponseDto;
 import com.anshuit.kanbanhub.dtos.EmployeeDto;
 import com.anshuit.kanbanhub.entities.Employee;
+import com.anshuit.kanbanhub.enums.ApiResponseEnum;
 import com.anshuit.kanbanhub.services.impls.DataTransferService;
 import com.anshuit.kanbanhub.services.impls.EmployeeServiceImpl;
 
@@ -54,7 +55,8 @@ public class EmployeeController {
 	}
 
 	@GetMapping("/{employeeDisplayId}")
-	public ResponseEntity<EmployeeDto> getEmployeeByEmployeeDisplayId(@PathVariable("employeeDisplayId") String employeeDisplayId) {
+	public ResponseEntity<EmployeeDto> getEmployeeByEmployeeDisplayId(
+			@PathVariable("employeeDisplayId") String employeeDisplayId) {
 		Employee employee = employeeService.getEmployeeByEmployeeDisplayId(employeeDisplayId);
 		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
 		return new ResponseEntity<>(employeeDto, HttpStatus.OK);
@@ -70,15 +72,16 @@ public class EmployeeController {
 	}
 
 	@PostMapping("/updateProfilePicture/{employeeDisplayId}")
-	public ResponseEntity<ApiResponseDto> updateProfilePictureByEmployeeDisplayId(@RequestParam("image") MultipartFile image,
-			@PathVariable("employeeDisplayId") String employeeDisplayId, HttpServletRequest request) {
+	public ResponseEntity<ApiResponseDto> updateProfilePictureByEmployeeDisplayId(
+			@RequestParam("image") MultipartFile image, @PathVariable("employeeDisplayId") String employeeDisplayId,
+			HttpServletRequest request) {
 
 		Employee employee = employeeService.updateProfilePictureByEmployeeDisplayId(image, employeeDisplayId);
 		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
 		ApiResponseDto apiResponseDto = ApiResponseDto.builder()
-				.message(GlobalConstants.PROFILE_PICTURE_SUCCESSFULLY_UPDATED).timestamp(LocalDateTime.now())
-				.status(HttpStatus.CREATED).statusCode(HttpStatus.CREATED.value()).path(request.getRequestURI())
-				.data(Map.of(GlobalConstants.KEY_EMPLOYEE_LCASE, employeeDto)).build();
+				.message(ApiResponseEnum.PROFILE_PICTURE_SUCCESSFULLY_UPDATED.getMessage())
+				.timestamp(LocalDateTime.now()).status(HttpStatus.CREATED).statusCode(HttpStatus.CREATED.value())
+				.path(request.getRequestURI()).data(Map.of(GlobalConstants.KEY_EMPLOYEE_LCASE, employeeDto)).build();
 		return new ResponseEntity<ApiResponseDto>(apiResponseDto, HttpStatus.CREATED);
 	}
 
@@ -88,14 +91,15 @@ public class EmployeeController {
 		Employee employee = employeeService.removeProfilePictureByEmployeeDisplayId(employeeDisplayId);
 		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
 		ApiResponseDto apiResponseDto = ApiResponseDto.builder()
-				.message(GlobalConstants.PROFILE_PICTURE_SUCCESSFULLY_REMOVED).timestamp(LocalDateTime.now())
-				.status(HttpStatus.OK).statusCode(HttpStatus.OK.value()).path(request.getRequestURI())
-				.data(Map.of(GlobalConstants.KEY_EMPLOYEE_LCASE, employeeDto)).build();
+				.message(ApiResponseEnum.PROFILE_PICTURE_SUCCESSFULLY_REMOVED.getMessage())
+				.timestamp(LocalDateTime.now()).status(HttpStatus.OK).statusCode(HttpStatus.OK.value())
+				.path(request.getRequestURI()).data(Map.of(GlobalConstants.KEY_EMPLOYEE_LCASE, employeeDto)).build();
 		return new ResponseEntity<ApiResponseDto>(apiResponseDto, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{employeeDisplayId}")
-	public ResponseEntity<EmployeeDto> deleteEmployeeByEmployeeDisplayId(@PathVariable("employeeDisplayId") String employeeDisplayId) {
+	public ResponseEntity<EmployeeDto> deleteEmployeeByEmployeeDisplayId(
+			@PathVariable("employeeDisplayId") String employeeDisplayId) {
 		Employee employee = employeeService.deleteEmployeeByEmployeeDisplayId(employeeDisplayId);
 		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
 		return new ResponseEntity<>(employeeDto, HttpStatus.OK);

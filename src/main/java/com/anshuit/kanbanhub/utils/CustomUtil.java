@@ -6,11 +6,12 @@ import com.anshuit.kanbanhub.constants.GlobalConstants;
 
 @Component
 public class CustomUtil {
-	public boolean isImageHavingValidExtension(String filename) {
+	public boolean isImageHavingValidExtensionForProfilePicture(String filename) {
 		filename = filename.toLowerCase();
-		if (filename.endsWith(GlobalConstants.EXTENSION_PNG) || filename.endsWith(GlobalConstants.EXTENSION_JPG)
-				|| filename.endsWith(GlobalConstants.EXTENSION_JPEG)) {
-			return true;
+		for (String extension : GlobalConstants.ALLOWED_PROFILE_PICTURE_IMAGE_EXTENSIONS) {
+			if (filename.endsWith(extension)) {
+				return true;
+			}
 		}
 		return false;
 	}

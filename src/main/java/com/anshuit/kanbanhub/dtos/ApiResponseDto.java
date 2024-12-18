@@ -16,6 +16,7 @@ public class ApiResponseDto {
 	private LocalDateTime timestamp;
 	private int statusCode;
 	private String message;
+	private String exceptionCode;
 	private HttpStatus status;
 	private String path;
 	private Map<Object, Object> data;

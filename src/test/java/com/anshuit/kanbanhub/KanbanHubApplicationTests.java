@@ -1,5 +1,6 @@
 package com.anshuit.kanbanhub;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ class KanbanHubApplicationTests {
 	@Autowired
 	private ProjectRepository projectRepository;
 
-	// @Test
+	@Test
+	@Disabled
 	void addEmployeeToProject() {
 		Employee employee = employeeRepository.findById(1).get();
 		Project project = projectRepository.findById(1).get();
@@ -33,7 +35,8 @@ class KanbanHubApplicationTests {
 		System.out.println(saved);
 	}
 
-	// @Test
+	@Test
+	@Disabled
 	void testDtoToEntityMapping() {
 		TaskDto taskDto = new TaskDto();
 		taskDto.setTaskStatus("UN-ASSIGNED");

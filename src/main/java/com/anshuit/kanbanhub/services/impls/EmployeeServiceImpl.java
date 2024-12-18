@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.anshuit.kanbanhub.constants.GlobalConstants;
 import com.anshuit.kanbanhub.entities.Employee;
 import com.anshuit.kanbanhub.entities.Role;
+import com.anshuit.kanbanhub.enums.ExceptionDetailsEnum;
 import com.anshuit.kanbanhub.exceptions.CustomException;
 import com.anshuit.kanbanhub.repositories.EmployeeRepository;
 import com.anshuit.kanbanhub.repositories.RoleRepository;
@@ -35,10 +36,10 @@ public class EmployeeServiceImpl {
 
 	public Employee createEmployee(Employee employee) {
 		// First check if employee is not already registered.
-		Optional<Employee> optional = employeeRepository.findByEmail(employee.getEmail());
+		Optional<Employee> optional = this.getEmployeeByEmailOptional(employee.getEmail());
 		if (optional.isPresent()) {
-			throw new CustomException(GlobalConstants.EMPLOYEE_ALREADY_EXIST_WITH_EMAIL + employee.getEmail(),
-					HttpStatus.BAD_REQUEST);
+			throw new CustomException(HttpStatus.BAD_REQUEST, ExceptionDetailsEnum.EMPLOYEE_ALREADY_EXIST_WITH_EMAIL,
+					employee.getEmail());
 		}
 
 		employee.setPassword(passwordEncoder.encode(employee.getPassword()));
@@ -55,17 +56,17 @@ public class EmployeeServiceImpl {
 
 	public Employee getEmployeeByEmployeeDisplayId(String employeeDisplayId) {
 		int employeeId = this.extractEmployeeIdFromEmployeeDisplayId(employeeDisplayId);
-		return employeeRepository.findById(employeeId).orElseThrow(() -> new CustomException(
-				GlobalConstants.EMPLOYEE_NOT_FOUND_WITH_DISPLAY_ID + employeeDisplayId, HttpStatus.NOT_FOUND));
+		return employeeRepository.findById(employeeId).orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND,
+				ExceptionDetailsEnum.EMPLOYEE_NOT_FOUND_WITH_DISPLAY_ID, employeeDisplayId));
 	}
 
-	public Optional<Employee> getEmployeeByIdOptinal(int employeeId) {
+	public Optional<Employee> getEmployeeByIdOptional(int employeeId) {
 		return employeeRepository.findById(employeeId);
 	}
 
 	public Employee getEmployeeByEmail(String email) {
-		return employeeRepository.findByEmail(email).orElseThrow(
-				() -> new CustomException(GlobalConstants.EMPLOYEE_NOT_FOUND_WITH_EMAIL + email, HttpStatus.NOT_FOUND));
+		return employeeRepository.findByEmail(email).orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND,
+				ExceptionDetailsEnum.EMPLOYEE_NOT_FOUND_WITH_EMAIL, email));
 	}
 
 	public Optional<Employee> getEmployeeByEmailOptional(String email) {
@@ -84,18 +85,18 @@ public class EmployeeServiceImpl {
 	public Employee updateProfilePictureByEmployeeDisplayId(MultipartFile file, String employeeDisplayId) {
 		Employee employee = this.getEmployeeByEmployeeDisplayId(employeeDisplayId);
 		String filename = file.getOriginalFilename();
-		if (file != null && customUtil.isImageHavingValidExtension(filename)) {
+		if (file != null && customUtil.isImageHavingValidExtensionForProfilePicture(filename)) {
 			try {
 				byte[] imageData = file.getBytes();
 				String profilePicName = UUID.randomUUID().toString().concat(customUtil.getFileExtension(filename));
 				employee.setProfilePicData(imageData);
 				employee.setProfilePic(profilePicName);
 			} catch (Exception e) {
-				throw new CustomException(GlobalConstants.ERROR_IN_UPDATING_PROFILE_PICTURE,
-						HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR,
+						ExceptionDetailsEnum.ERROR_IN_UPDATING_PROFILE_PICTURE);
 			}
 		} else {
-			throw new CustomException(GlobalConstants.NOT_AN_ALLOWED_IMAGE_EXTENSION, HttpStatus.BAD_REQUEST);
+			throw new CustomException(HttpStatus.BAD_REQUEST, ExceptionDetailsEnum.NOT_AN_ALLOWED_IMAGE_EXTENSION);
 		}
 		return employeeRepository.save(employee);
 	}
@@ -110,7 +111,7 @@ public class EmployeeServiceImpl {
 	public byte[] getEmployeeProfilePicDataByEmployeeDisplayId(String employeeDisplayId) {
 		Employee employee = this.getEmployeeByEmployeeDisplayId(employeeDisplayId);
 		if (employee == null || employee.getProfilePicData() == null) {
-			throw new CustomException(GlobalConstants.PROFILE_PICTURE_NOT_PRESENT, HttpStatus.NOT_FOUND);
+			throw new CustomException(HttpStatus.NOT_FOUND, ExceptionDetailsEnum.PROFILE_PICTURE_NOT_PRESENT);
 		}
 		return employee.getProfilePicData();
 	}
@@ -133,16 +134,16 @@ public class EmployeeServiceImpl {
 
 	public int extractEmployeeIdFromEmployeeDisplayId(String employeeDisplayId) {
 		if (!employeeDisplayId.startsWith(GlobalConstants.DEFAULT_EMPLOYEE_DISPLAY_ID_PREFIX)) {
-			throw new CustomException(GlobalConstants.EMPLOYEE_DISPLAY_ID_NOT_STARTING_WITH_PREFIX,
-					HttpStatus.BAD_REQUEST);
+			throw new CustomException(HttpStatus.BAD_REQUEST,
+					ExceptionDetailsEnum.EMPLOYEE_DISPLAY_ID_NOT_STARTING_WITH_PREFIX);
 		}
 
 		try {
 			return Integer
 					.parseInt(employeeDisplayId.substring(GlobalConstants.DEFAULT_EMPLOYEE_DISPLAY_ID_PREFIX.length()));
 		} catch (NumberFormatException e) {
-			throw new CustomException(GlobalConstants.EMPLOYEE_ID_FROM_EMPLOYEE_DISPLAY_ID_PARSING_ERROR,
-					HttpStatus.BAD_REQUEST);
+			throw new CustomException(HttpStatus.BAD_REQUEST,
+					ExceptionDetailsEnum.EMPLOYEE_ID_FROM_EMPLOYEE_DISPLAY_ID_PARSING_ERROR);
 		}
 	}
 }

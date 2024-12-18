@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.anshuit.kanbanhub.constants.GlobalConstants;
 import com.anshuit.kanbanhub.entities.Employee;
 import com.anshuit.kanbanhub.entities.Project;
 import com.anshuit.kanbanhub.entities.Task;
+import com.anshuit.kanbanhub.enums.ExceptionDetailsEnum;
 import com.anshuit.kanbanhub.exceptions.CustomException;
 
 @Service
@@ -29,8 +29,8 @@ public class BusinessOperationServiceImpl {
 
 		for (Employee employeeInProject : project.getEmployees()) {
 			if (employeeInProject.getEmployeeDisplayId().equals(employeeDisplayId)) {
-				throw new CustomException(GlobalConstants.EMPLOYEE_ALREADY_ALLOCATED_TO_PROJECT + employee.getEmail(),
-						HttpStatus.BAD_REQUEST);
+				throw new CustomException(HttpStatus.BAD_REQUEST,
+						ExceptionDetailsEnum.EMPLOYEE_ALREADY_ALLOCATED_TO_PROJECT_WITH_EMAIL, employee.getEmail());
 			}
 		}
 

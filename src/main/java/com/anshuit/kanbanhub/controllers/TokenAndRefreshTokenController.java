@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.anshuit.kanbanhub.constants.GlobalConstants;
 import com.anshuit.kanbanhub.dtos.ApiResponseDto;
 import com.anshuit.kanbanhub.dtos.TokenDto;
+import com.anshuit.kanbanhub.enums.ApiResponseEnum;
+import com.anshuit.kanbanhub.enums.ExceptionDetailsEnum;
 import com.anshuit.kanbanhub.exceptions.CustomException;
 import com.anshuit.kanbanhub.security.MyJwtUtil;
 import com.anshuit.kanbanhub.services.impls.RefreshTokenServiceImpl;
@@ -41,11 +43,11 @@ public class TokenAndRefreshTokenController {
 			log.info("Validating Token...");
 			isTokenExpired = myJwtUtil.isTokenExpired(tokenDto.getToken());
 		} catch (SignatureException e) {
-			log.info(GlobalConstants.JWT_SIGNATURE_EXCEPTION_MESSAGE);
+			log.info(ExceptionDetailsEnum.JWT_SIGNATURE_EXCEPTION_MESSAGE.getExceptionMessage());
 		} catch (MalformedJwtException e) {
-			log.info(GlobalConstants.JWT_MALFORMED_EXCEPTION_MESSAGE);
+			log.info(ExceptionDetailsEnum.JWT_MALFORMED_EXCEPTION_MESSAGE.getExceptionMessage());
 		} catch (ExpiredJwtException e) {
-			log.info(GlobalConstants.JWT_EXPIRED_EXCEPTION_MESSAGE);
+			log.info(ExceptionDetailsEnum.JWT_EXPIRED_EXCEPTION_MESSAGE.getExceptionMessage());
 		}
 		Boolean isTokenValid = !isTokenExpired;
 		log.info("Is Token Valid : " + isTokenValid);
@@ -63,8 +65,8 @@ public class TokenAndRefreshTokenController {
 	public ResponseEntity<TokenDto> refreshToken(@RequestBody TokenDto tokenDto) {
 		TokenDto tokenDtoResponse = refreshTokenService.performRefresh(tokenDto.getRefreshToken());
 		if (tokenDtoResponse == null) {
-			throw new CustomException(GlobalConstants.REFRESH_TOKEN_EXPIRED_WITH_PERFORM_RE_LOGIN_MSG,
-					HttpStatus.UNAUTHORIZED);
+			throw new CustomException(HttpStatus.UNAUTHORIZED,
+					ExceptionDetailsEnum.REFRESH_TOKEN_EXPIRED_WITH_PERFORM_RE_LOGIN_MSG);
 		}
 		return new ResponseEntity<>(tokenDtoResponse, HttpStatus.OK);
 	}
@@ -75,7 +77,7 @@ public class TokenAndRefreshTokenController {
 		refreshTokenService.deleteRefreshTokenByRefreshTokenStringFinderPlusOperation(tokenDto.getRefreshToken());
 		HttpStatus responseStatus = HttpStatus.OK;
 		ApiResponseDto apiResponseDto = ApiResponseDto.builder()
-				.message(GlobalConstants.REFRESH_TOKEN_SUCCESSFULLY_DELETED).timestamp(LocalDateTime.now())
+				.message(ApiResponseEnum.REFRESH_TOKEN_SUCCESSFULLY_DELETED.getMessage()).timestamp(LocalDateTime.now())
 				.status(responseStatus).statusCode(responseStatus.value()).path(request.getRequestURI()).build();
 		return new ResponseEntity<>(apiResponseDto, responseStatus);
 	}
@@ -86,7 +88,7 @@ public class TokenAndRefreshTokenController {
 		refreshTokenService.deleteRefreshTokenByIdFinderPlusOperation(refreshTokenId);
 		HttpStatus responseStatus = HttpStatus.OK;
 		ApiResponseDto apiResponseDto = ApiResponseDto.builder()
-				.message(GlobalConstants.REFRESH_TOKEN_SUCCESSFULLY_DELETED).timestamp(LocalDateTime.now())
+				.message(ApiResponseEnum.REFRESH_TOKEN_SUCCESSFULLY_DELETED.getMessage()).timestamp(LocalDateTime.now())
 				.status(responseStatus).statusCode(responseStatus.value()).path(request.getRequestURI()).build();
 		return new ResponseEntity<>(apiResponseDto, responseStatus);
 	}

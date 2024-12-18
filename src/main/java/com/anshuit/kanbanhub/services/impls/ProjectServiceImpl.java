@@ -14,6 +14,7 @@ import com.anshuit.kanbanhub.constants.GlobalConstants;
 import com.anshuit.kanbanhub.constants.JPAConstants;
 import com.anshuit.kanbanhub.entities.Project;
 import com.anshuit.kanbanhub.entities.Task;
+import com.anshuit.kanbanhub.enums.ExceptionDetailsEnum;
 import com.anshuit.kanbanhub.enums.ProjectStatusEnum;
 import com.anshuit.kanbanhub.exceptions.CustomException;
 import com.anshuit.kanbanhub.repositories.ProjectRepository;
@@ -45,9 +46,8 @@ public class ProjectServiceImpl {
 	public Project getProjectByProjectDisplayId(String projectDisplayId) {
 		int projectId = this.extractProjectIdFromProjectDisplayId(projectDisplayId);
 		Project project = projectRepository.findById(projectId)
-				.orElseThrow(() -> new CustomException(
-						GlobalConstants.PROJECT_NOT_FOUND_WITH_PROJECT_DISPLAY_ID + projectDisplayId,
-						HttpStatus.NOT_FOUND));
+				.orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND,
+						ExceptionDetailsEnum.PROJECT_NOT_FOUND_WITH_PROJECT_DISPLAY_ID, projectDisplayId));
 		LinkedHashSet<Task> sortedSet = project.getTasks().stream()
 				.sorted((task1, task2) -> -Integer.compare(task1.getTaskId(), task2.getTaskId())) // Sort by taskId
 				.collect(Collectors.toCollection(LinkedHashSet::new));
@@ -61,16 +61,16 @@ public class ProjectServiceImpl {
 
 	public int extractProjectIdFromProjectDisplayId(String projectDisplayId) {
 		if (!projectDisplayId.startsWith(GlobalConstants.DEFAULT_PROJECT_DISPLAY_ID_PREFIX)) {
-			throw new CustomException(GlobalConstants.PROJECT_DISPLAY_ID_NOT_STARTING_WITH_PREFIX,
-					HttpStatus.BAD_REQUEST);
+			throw new CustomException(HttpStatus.BAD_REQUEST,
+					ExceptionDetailsEnum.PROJECT_DISPLAY_ID_NOT_STARTING_WITH_PREFIX);
 		}
 
 		try {
 			return Integer
 					.parseInt(projectDisplayId.substring(GlobalConstants.DEFAULT_PROJECT_DISPLAY_ID_PREFIX.length()));
 		} catch (NumberFormatException e) {
-			throw new CustomException(GlobalConstants.PROJECT_ID_FROM_PROJECT_DISPLAY_ID_PARSING_ERROR,
-					HttpStatus.BAD_REQUEST);
+			throw new CustomException(HttpStatus.BAD_REQUEST,
+					ExceptionDetailsEnum.PROJECT_ID_FROM_PROJECT_DISPLAY_ID_PARSING_ERROR);
 		}
 	}
 }

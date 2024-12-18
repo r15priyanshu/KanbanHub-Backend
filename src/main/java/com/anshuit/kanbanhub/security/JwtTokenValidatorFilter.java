@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.anshuit.kanbanhub.constants.GlobalConstants;
+import com.anshuit.kanbanhub.enums.ExceptionDetailsEnum;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -46,11 +47,11 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 				log.info("Extracting Username From Token...");
 				email = jwtUtil.extractUsername(encodedTokenWithoutBearer);
 			} catch (SignatureException e) {
-				log.info(GlobalConstants.JWT_SIGNATURE_EXCEPTION_MESSAGE);
+				log.info(ExceptionDetailsEnum.JWT_SIGNATURE_EXCEPTION_MESSAGE.getExceptionMessage());
 			} catch (MalformedJwtException e) {
-				log.info(GlobalConstants.JWT_MALFORMED_EXCEPTION_MESSAGE);
+				log.info(ExceptionDetailsEnum.JWT_MALFORMED_EXCEPTION_MESSAGE.getExceptionMessage());
 			} catch (ExpiredJwtException e) {
-				log.info(GlobalConstants.JWT_EXPIRED_EXCEPTION_MESSAGE);
+				log.info(ExceptionDetailsEnum.JWT_EXPIRED_EXCEPTION_MESSAGE.getExceptionMessage());
 			}
 
 			if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -64,7 +65,8 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 				}
 			}
 		} else {
-			log.info("Authorization Header is either empty or Does not starts With Bearer !! Invoking Next Filter in the Chain !!");
+			log.info(
+					"Authorization Header is either empty or Does not starts With Bearer !! Invoking Next Filter in the Chain !!");
 		}
 		// Should Always Execute
 		filterChain.doFilter(request, response);
