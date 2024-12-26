@@ -42,7 +42,7 @@ public class Employee {
 	@JoinColumn(name = "role_id")
 	private Role role;
 
-	@OneToOne(mappedBy = "employee")
+	@OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
 	private RefreshToken refreshToken;
 
 	public Employee(String firstName, String lastName, String email, String password, Address address) {

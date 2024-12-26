@@ -44,7 +44,7 @@ public class SecurityConfiguration {
 		http.authorizeHttpRequests((requests) -> requests
 				.requestMatchers("/error", GlobalConstants.LOGIN_URL, GlobalConstants.REGISTER_URL,
 						GlobalConstants.CHECK_TOKEN_VALIDITY_URL, GlobalConstants.CHECK_REFRESH_TOKEN_VALIDITY_URL,
-						GlobalConstants.REFRESH_TOKEN_URL,
+						GlobalConstants.REFRESH_TOKEN_BY_EMPLOYEE_DISPLAY_ID_URL,
 						GlobalConstants.DELETE_REFRESH_TOKEN_BY_TOKEN_STRING_IN_REQUEST_BODY_URL)
 				.permitAll().requestMatchers("/images/**").permitAll().anyRequest().authenticated());
 		http.exceptionHandling(ehc -> ehc.authenticationEntryPoint(new BasicAuthenticationEntryPoint()));

@@ -57,6 +57,8 @@ public enum ExceptionDetailsEnum {
 	REFRESH_TOKEN_NOT_FOUND_WITH_TOKEN("4005", "Refresh Token Not Found With Token : %s"),
 
 	REFRESH_TOKEN_EXPIRED_WITH_PERFORM_RE_LOGIN_MSG("4006", "Refresh Token Already Expired !! Please Re-Login !!"),
+	
+	REFRESH_TOKEN_DOES_NOT_BELONG_TO_EMPLOYEE_WITH_DISPLAY_ID("4007", "Refresh Token Does Not Belong To Employee With Display Id : %s !!"),
 
 	// Other Constants
 	PROFILE_PICTURE_NOT_PRESENT("5001", "Profile Picture Not Present !!"),

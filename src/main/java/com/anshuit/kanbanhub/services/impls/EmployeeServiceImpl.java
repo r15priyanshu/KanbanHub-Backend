@@ -34,6 +34,10 @@ public class EmployeeServiceImpl {
 	@Autowired
 	private CustomUtil customUtil;
 
+	public Employee saveOrUpdateEmployee(Employee employee) {
+		return employeeRepository.save(employee);
+	}
+
 	public Employee createEmployee(Employee employee) {
 		// First check if employee is not already registered.
 		Optional<Employee> optional = this.getEmployeeByEmailOptional(employee.getEmail());
@@ -46,7 +50,7 @@ public class EmployeeServiceImpl {
 		employee.setProfilePic(GlobalConstants.DEFAULT_PROFILE_PIC_NAME);
 		Role role = roleRepository.findById(1).orElse(null);
 		employee.setRole(role);
-		return employeeRepository.save(employee);
+		return this.saveOrUpdateEmployee(employee);
 	}
 
 	public List<Employee> getAllEmployees() {

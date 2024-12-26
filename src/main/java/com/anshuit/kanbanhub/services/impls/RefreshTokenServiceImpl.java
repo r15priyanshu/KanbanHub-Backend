@@ -30,10 +30,18 @@ public class RefreshTokenServiceImpl {
 	@Autowired
 	private RefreshTokenRepository refreshTokenRepository;
 
-	public TokenDto performRefresh(String refreshToken) {
+	@Autowired
+	private EmployeeServiceImpl employeeService;
+
+	public TokenDto performRefresh(String refreshToken,String employeeDisplayId) {
 		log.info("Performing Token Refresh For : " + refreshToken);
 		RefreshToken foundRefreshToken = this.findRefreshTokenByRefreshTokenString(refreshToken);
 		Employee employee = foundRefreshToken.getEmployee();
+		
+		if(!employee.getEmployeeDisplayId().equals(employeeDisplayId)) {
+			throw new CustomException(HttpStatus.BAD_REQUEST, ExceptionDetailsEnum.REFRESH_TOKEN_DOES_NOT_BELONG_TO_EMPLOYEE_WITH_DISPLAY_ID,employeeDisplayId);
+		}
+		
 		TokenDto tokenDto = null;
 		boolean isRefreshTokenValid = this.checkIfRefreshTokenValidOnlyOperation(foundRefreshToken);
 		log.info("Refresh Token Valid : " + isRefreshTokenValid);
@@ -51,7 +59,7 @@ public class RefreshTokenServiceImpl {
 		return tokenDto;
 	}
 
-	public RefreshToken createRefreshToken(Employee employee) {
+	public RefreshToken getRefreshToken(Employee employee) {
 		RefreshToken refreshToken = employee.getRefreshToken();
 		if (refreshToken == null) {
 			log.info("Refresh Token Not Found !! Generating New Refresh Token !!");
@@ -61,10 +69,10 @@ public class RefreshTokenServiceImpl {
 			refreshToken.setExpiry(
 					new Date(System.currentTimeMillis() + GlobalConstants.JWT_REFRESH_TOKEN_VALIDITY_IN_MILLISECONDS));
 		} else {
-			log.info(
-					"Refresh Token Present But Not Valid !! Deleting Old Refresh Token and Generating New Refresh Token !!");
-			this.deleteRefreshTokenByRefreshTokenObjectOnlyOperation(refreshToken);
-			refreshToken = this.createRefreshTokenOnlyOperation(employee);
+			log.info("Refresh Token Present But Not Valid !! Updating Old Refresh Token With New Refresh Token and Expiry !!");
+			RefreshToken newRefreshTokenDetails = this.createRefreshTokenOnlyOperation(employee);
+			refreshToken.setRefreshToken(newRefreshTokenDetails.getRefreshToken());
+			refreshToken.setExpiry(newRefreshTokenDetails.getExpiry());
 		}
 		refreshToken = refreshTokenRepository.save(refreshToken);
 		return refreshToken;
@@ -110,15 +118,19 @@ public class RefreshTokenServiceImpl {
 
 	public void deleteRefreshTokenByIdFinderPlusOperation(Integer refreshTokenId) {
 		RefreshToken foundRefreshToken = this.findRefreshTokenById(refreshTokenId);
-		refreshTokenRepository.delete(foundRefreshToken);
+		this.deleteRefreshTokenByRefreshTokenObjectOnlyOperation(foundRefreshToken);
 	}
 
 	public void deleteRefreshTokenByRefreshTokenStringFinderPlusOperation(String refreshToken) {
 		RefreshToken foundRefreshToken = this.findRefreshTokenByRefreshTokenString(refreshToken);
-		refreshTokenRepository.delete(foundRefreshToken);
+		this.deleteRefreshTokenByRefreshTokenObjectOnlyOperation(foundRefreshToken);
 	}
 
 	public void deleteRefreshTokenByRefreshTokenObjectOnlyOperation(RefreshToken refreshToken) {
+		// We will first have to break the relationship and save changes on employee
+		Employee employee = refreshToken.getEmployee();
+		employee.setRefreshToken(null);
+		employeeService.saveOrUpdateEmployee(employee);
 		refreshTokenRepository.delete(refreshToken);
 	}
 }

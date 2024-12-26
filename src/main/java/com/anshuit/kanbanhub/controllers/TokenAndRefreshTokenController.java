@@ -61,9 +61,9 @@ public class TokenAndRefreshTokenController {
 		return new ResponseEntity<>(isRefreshTokenValid, HttpStatus.OK);
 	}
 
-	@PostMapping(GlobalConstants.REFRESH_TOKEN_URL)
-	public ResponseEntity<TokenDto> refreshToken(@RequestBody TokenDto tokenDto) {
-		TokenDto tokenDtoResponse = refreshTokenService.performRefresh(tokenDto.getRefreshToken());
+	@PostMapping(GlobalConstants.REFRESH_TOKEN_BY_EMPLOYEE_DISPLAY_ID_URL)
+	public ResponseEntity<TokenDto> refreshTokenByEmployeeDisplayId(@RequestBody TokenDto tokenDto,@PathVariable("employeeDisplayId") String employeeDisplayId) {
+		TokenDto tokenDtoResponse = refreshTokenService.performRefresh(tokenDto.getRefreshToken(),employeeDisplayId);
 		if (tokenDtoResponse == null) {
 			throw new CustomException(HttpStatus.UNAUTHORIZED,
 					ExceptionDetailsEnum.REFRESH_TOKEN_EXPIRED_WITH_PERFORM_RE_LOGIN_MSG);

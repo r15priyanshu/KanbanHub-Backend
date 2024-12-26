@@ -36,8 +36,8 @@ public class GlobalConstants {
 	public static final String LOGIN_URL = "/auth/login";
 	public static final String REGISTER_URL = "/auth/register";
 	public static final String CHECK_TOKEN_VALIDITY_URL = "/tokenAndRefreshToken/validateToken";
-	public static final String REFRESH_TOKEN_URL = "/tokenAndRefreshToken/refreshToken";
-	public static final String CHECK_REFRESH_TOKEN_VALIDITY_URL = "/tokenAndRefreshToken/validateRefreshToken";
+	public static final String REFRESH_TOKEN_BY_EMPLOYEE_DISPLAY_ID_URL = "/public/tokenAndRefreshToken/refreshToken/employee/{employeeDisplayId}";
+	public static final String CHECK_REFRESH_TOKEN_VALIDITY_URL = "/public/tokenAndRefreshToken/validateRefreshToken";
 	public static final String DELETE_REFRESH_TOKEN_BY_TOKEN_STRING_IN_REQUEST_BODY_URL = "/tokenAndRefreshToken/deleteRefreshToken";
 
 	public static final String EXTENSION_JPG = ".jpg";
@@ -52,6 +52,6 @@ public class GlobalConstants {
 	// SET OF URLS FOR WHICH TOKEN VALIDATOR FILTER SHOULD NOT RUN
 	public static final Set<String> EXCLUDED_PATHS_FOR_JWT_TOKEN_VALIDATOR_FILTER_SET = Set.of(
 			GlobalConstants.LOGIN_URL, GlobalConstants.REGISTER_URL, GlobalConstants.CHECK_TOKEN_VALIDITY_URL,
-			GlobalConstants.CHECK_REFRESH_TOKEN_VALIDITY_URL, GlobalConstants.REFRESH_TOKEN_URL,
+			GlobalConstants.CHECK_REFRESH_TOKEN_VALIDITY_URL, GlobalConstants.REFRESH_TOKEN_BY_EMPLOYEE_DISPLAY_ID_URL,
 			GlobalConstants.DELETE_REFRESH_TOKEN_BY_TOKEN_STRING_IN_REQUEST_BODY_URL);
 }

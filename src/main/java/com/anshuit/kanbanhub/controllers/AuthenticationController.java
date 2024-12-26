@@ -75,7 +75,7 @@ public class AuthenticationController {
 		// Setting The Token In Response Header
 		response.setHeader(GlobalConstants.JWT_TOKEN_RESPONSE_HEADER_KEY, token);
 		response.setHeader(GlobalConstants.JWT_REFRESH_TOKEN_RESPONSE_HEADER_KEY,
-				refreshTokenService.createRefreshToken(employee).getRefreshToken());
+				refreshTokenService.getRefreshToken(employee).getRefreshToken());
 		EmployeeDto employeeDto = dataTransferService.mapEmployeeToEmployeeDto(employee);
 		return new ResponseEntity<>(employeeDto, HttpStatus.OK);
 	}
